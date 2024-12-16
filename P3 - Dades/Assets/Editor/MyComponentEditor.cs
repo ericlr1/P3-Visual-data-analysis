@@ -24,6 +24,7 @@ public class MyComponentEditor : Editor
         if (GUILayout.Button("Delete Tiles"))
         {
             // Delete Tiles
+            myComponent.DeleteTiles();
         }
     }
 }

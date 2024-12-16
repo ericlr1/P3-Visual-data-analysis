@@ -15,8 +15,13 @@ public class TileMapManager : MonoBehaviour
     private float tileSize_X;
     private float tileSize_Z;
 
+    public GameObject parent;
+
     public void CalculateTiles() // Calculate Tile Data
     {
+        // Delete all the tiles before create new ones
+        DeleteTiles();
+
         tileSize_X = mapX / rows;
         tileSize_Z = mapZ / columns;
 
@@ -51,7 +56,18 @@ public class TileMapManager : MonoBehaviour
                 randomMaterial.color = randomColor;
                 tile.GetComponent<Renderer>().material = randomMaterial;
                 
-                Instantiate(tile);
+                Instantiate(tile,parent.transform);
+            }
+        }
+    }
+
+    public void DeleteTiles()
+    {
+        if (parent != null)
+        {
+            foreach (Transform child in parent.transform)
+            {
+                DestroyImmediate(child.gameObject);
             }
         }
     }
