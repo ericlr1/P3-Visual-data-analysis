@@ -17,6 +17,8 @@ public class TileMapManager : MonoBehaviour
 
     public GameObject parent;
 
+    public GameObject tilePrefab;
+
     public void CalculateTiles() // Calculate Tile Data
     {
         // Delete all the tiles before create new ones
@@ -40,23 +42,22 @@ public class TileMapManager : MonoBehaviour
 
         for (int i = 0; i < rows; i++)
         {
+            pos.x = gameObject.transform.position.x - (mapX / 2) + (tileSize_X / 2);
             pos.z += tileSize_Z;
 
             for (int j = 0; j < columns; j++)
             {
                 pos.x += tileSize_X;
-                
-                GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                tile.transform.position = pos ;
-                tile.transform.localScale = new Vector3(tileSize_X,1,tileSize_Z);
 
+                GameObject tile = Instantiate(tilePrefab, parent.transform);
+
+                tile.transform.position = pos;
+                tile.transform.localScale = new Vector3(tileSize_X, 1, tileSize_Z);
 
                 Color randomColor = new Color(Random.value, Random.value, Random.value);
                 Material randomMaterial = new Material(Shader.Find("Standard"));
                 randomMaterial.color = randomColor;
                 tile.GetComponent<Renderer>().material = randomMaterial;
-                
-                Instantiate(tile,parent.transform);
             }
         }
     }
@@ -65,9 +66,9 @@ public class TileMapManager : MonoBehaviour
     {
         if (parent != null)
         {
-            foreach (Transform child in parent.transform)
+            for (int i = parent.transform.childCount - 1; i >= 0; i--)
             {
-                DestroyImmediate(child.gameObject);
+                DestroyImmediate(parent.transform.GetChild(i).gameObject);
             }
         }
     }
