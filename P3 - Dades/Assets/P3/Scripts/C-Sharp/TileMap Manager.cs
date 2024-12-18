@@ -53,7 +53,7 @@ public class TileMapManager : MonoBehaviour
         pos.x = (gameObject.transform.position.x - (f_MapX / 2)) + (tileSize_X / 2);
         pos.z = (gameObject.transform.position.z + (f_MapZ / 2)) - (tileSize_Z / 2);
 
-        for (int i = 0; i < rows; i++)
+        for (int i = 0; i < columns; i++)
         {
             if (i != 0)
             {
@@ -61,7 +61,7 @@ public class TileMapManager : MonoBehaviour
                 pos.z -= tileSize_Z;
             }
             
-            for (int j = 0; j < columns; j++)
+            for (int j = 0; j < rows; j++)
             {
                 if (j != 0)
                 {
