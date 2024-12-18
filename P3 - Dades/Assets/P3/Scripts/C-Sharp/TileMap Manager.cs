@@ -24,7 +24,9 @@ public class TileMapManager : MonoBehaviour
 
     public GameObject tilePrefab;
 
-    private List<GameObject> tiles;
+    [SerializeField] private List<GameObject> tiles;
+
+    GameObject[,] tilesPrefab;
 
     public void CalculateTiles() // Calculate Tile Data
     {
@@ -84,6 +86,7 @@ public class TileMapManager : MonoBehaviour
         }
     }
 
+
     public void DeleteTiles()
     {
         if (parent != null)
@@ -91,6 +94,16 @@ public class TileMapManager : MonoBehaviour
             for (int i = parent.transform.childCount - 1; i >= 0; i--)
             {
                 DestroyImmediate(parent.transform.GetChild(i).gameObject);
+            }
+        }
+
+        tiles.Clear();
+
+        for (int x = tilesPrefab.GetLength(0) - 1; x >= 0; x--)
+        {
+            for (int y = tilesPrefab.GetLength(1) - 1; y >= 0; y--)
+            {
+                tilesPrefab[x, y] = null;
             }
         }
     }
