@@ -6,11 +6,16 @@ using static UnityEditor.PlayerSettings;
 
 public class TileMapManager : MonoBehaviour
 {
-    [SerializeField, Range(1, 100)] float rows;
-    [SerializeField, Range(1, 100)] float columns; 
+    [SerializeField, Range(1, 100)] int rows;
+    [SerializeField, Range(1, 100)] int columns;
+    private float f_Rows;
+    private float f_Columns;
 
-    [SerializeField, Range(1, 1000)] float mapX;
-    [SerializeField, Range(1, 1000)] float mapZ;
+    [SerializeField, Range(1, 1000)] int mapX;
+    [SerializeField, Range(1, 1000)] int mapZ;
+    private float f_MapX;
+    private float f_MapZ;
+
 
     private float tileSize_X;
     private float tileSize_Z;
@@ -19,13 +24,21 @@ public class TileMapManager : MonoBehaviour
 
     public GameObject tilePrefab;
 
+    private List<GameObject> tiles;
+
     public void CalculateTiles() // Calculate Tile Data
     {
         // Delete all the tiles before create new ones
         DeleteTiles();
 
-        tileSize_X = mapX / rows;
-        tileSize_Z = mapZ / columns;
+        f_Rows = (float)rows;
+        f_Columns = (float)columns;
+
+        f_MapX = (float)mapX;
+        f_MapZ = (float)mapZ;
+
+        tileSize_X = f_MapX / f_Rows;
+        tileSize_Z = f_MapZ / f_Columns;
 
         Debug.Log("Rows: " + rows + " Columns: " + columns);
         Debug.Log("tileSize_X: " + tileSize_X + " tileSize_Z: " + tileSize_Z);
@@ -35,22 +48,29 @@ public class TileMapManager : MonoBehaviour
 
     private void CreateTiles() // Create Tile Grid
     {
-        Vector3 pos = new Vector3 (0, 0, 0);
+        Vector3 pos = new Vector3 (0, gameObject.transform.position.y, 0);
 
-        pos.x = gameObject.transform.position.x - (mapX / 2) + (tileSize_X / 2);
-        pos.z = gameObject.transform.position.z - (mapZ / 2) + (tileSize_Z / 2);
+        pos.x = (gameObject.transform.position.x - (f_MapX / 2)) + (tileSize_X / 2);
+        pos.z = (gameObject.transform.position.z + (f_MapZ / 2)) - (tileSize_Z / 2);
 
         for (int i = 0; i < rows; i++)
         {
-            pos.x = gameObject.transform.position.x - (mapX / 2) + (tileSize_X / 2);
-            pos.z += tileSize_Z;
-
+            if (i != 0)
+            {
+                pos.x = (gameObject.transform.position.x - (f_MapX / 2)) + (tileSize_X / 2);
+                pos.z -= tileSize_Z;
+            }
+            
             for (int j = 0; j < columns; j++)
             {
-                pos.x += tileSize_X;
-
+                if (j != 0)
+                {
+                    pos.x += tileSize_X;
+                }
+                
                 GameObject tile = Instantiate(tilePrefab, parent.transform);
 
+                tile.name = "Tile " + i + "_" + j;
                 tile.transform.position = pos;
                 tile.transform.localScale = new Vector3(tileSize_X, 1, tileSize_Z);
 
@@ -58,6 +78,8 @@ public class TileMapManager : MonoBehaviour
                 Material randomMaterial = new Material(Shader.Find("Standard"));
                 randomMaterial.color = randomColor;
                 tile.GetComponent<Renderer>().material = randomMaterial;
+
+                tiles.Add(tile);
             }
         }
     }

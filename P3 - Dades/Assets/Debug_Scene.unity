@@ -154589,8 +154589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 732209f887e95d343b31106fa2be8f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 20
-  columns: 20
+  rows: 30
+  columns: 30
   mapX: 150
   mapZ: 100
   parent: {fileID: 217621968}
