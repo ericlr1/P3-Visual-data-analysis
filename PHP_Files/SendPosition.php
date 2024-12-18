@@ -8,11 +8,11 @@ $y = isset($_POST["y"]) ? floatval($_POST["y"]) : 0;     // Get 'DateTime' or se
 $z = isset($_POST["z"]) ? floatval($_POST["z"]) : 0;     // Get 'SessionID' and convert to an integer, or use 0 if not provided
 
 // Check if all necessary data is present (non-zero for IDs and non-empty date)
-if ($x > 0 && $y > 0 && $z > 0) 
+if (true) 
 {
     // Prepare an SQL query to insert the data into the ItemSales table
     $stmt = $conn->prepare("INSERT INTO `player_positions`(`x`, `y`, `z`) VALUES (?, ?, ?)");
-    $stmt->bind_param("fff", $x, $y, $z);  // Bind parameters (float, float, float) to the SQL query
+    $stmt->bind_param("ddd", $x, $y, $z);  // Bind parameters (float, float, float) to the SQL query
 
     // Execute the SQL query
     if ($stmt->execute()) {    
