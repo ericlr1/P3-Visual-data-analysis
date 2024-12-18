@@ -6,11 +6,11 @@ using static UnityEditor.PlayerSettings;
 
 public class TileMapManager : MonoBehaviour
 {
-    [SerializeField, Range(1, 100)] int rows;
-    [SerializeField, Range(1, 100)] int columns; 
+    [SerializeField, Range(1, 100)] float rows;
+    [SerializeField, Range(1, 100)] float columns; 
 
-    [SerializeField, Range(1, 1000)] int mapX;
-    [SerializeField, Range(1, 1000)] int mapZ;
+    [SerializeField, Range(1, 1000)] float mapX;
+    [SerializeField, Range(1, 1000)] float mapZ;
 
     private float tileSize_X;
     private float tileSize_Z;
@@ -71,15 +71,5 @@ public class TileMapManager : MonoBehaviour
                 DestroyImmediate(parent.transform.GetChild(i).gameObject);
             }
         }
-    }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
     }
 }
