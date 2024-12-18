@@ -4,7 +4,7 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class DatabaseConnect : MonoBehaviour
+public class DatabaseSend : MonoBehaviour
 {
     public GetPlayerData playerData; // Reference to the script or component holding the player's position
 
@@ -34,7 +34,7 @@ public class DatabaseConnect : MonoBehaviour
             Vector3 currentPosition = playerData.playerPosition;
 
             // Check if the position has changed
-            if (currentPosition != lastSentPosition)
+            if (/*currentPosition != lastSentPosition*/ true)
             {
                 // Send the new position to the server
                 StartCoroutine(SendPositionToServer(currentPosition));
