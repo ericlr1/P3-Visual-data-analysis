@@ -2,36 +2,56 @@
 // Include the file that establishes a connection to the database
 include 'DatabaseConnect.php';
 
-// Receive data sent from Unity via POST request
-$x = isset($_POST["x"]) ? floatval($_POST["x"]) : 0;     // Get 'ItemID' and convert it to an integer, or use 0 if not provided
-$y = isset($_POST["y"]) ? floatval($_POST["y"]) : 0;     // Get 'DateTime' or set to an empty string if not provided
-$z = isset($_POST["z"]) ? floatval($_POST["z"]) : 0;     // Get 'SessionID' and convert to an integer, or use 0 if not provided
+try {
+    // Receive data sent from Unity via POST request
+    $x = isset($_POST["x"]) ? floatval($_POST["x"]) : null; // Get 'x' or null if not provided
+    $y = isset($_POST["y"]) ? floatval($_POST["y"]) : null; // Get 'y' or null if not provided
+    $z = isset($_POST["z"]) ? floatval($_POST["z"]) : null; // Get 'z' or null if not provided
 
-// Check if all necessary data is present (non-zero for IDs and non-empty date)
-if (true) 
-{
-    // Prepare an SQL query to insert the data into the ItemSales table
-    $stmt = $conn->prepare("INSERT INTO `player_positions`(`x`, `y`, `z`) VALUES (?, ?, ?)");
-    $stmt->bind_param("ddd", $x, $y, $z);  // Bind parameters (float, float, float) to the SQL query
-
-    // Execute the SQL query
-    if ($stmt->execute()) {    
-        // Get the last inserted ID from the database (auto-increment field)
-        $last_id = $conn->insert_id;
-        echo "Record inserted successfully. Last inserted ID is: " . $last_id;
-    } else {
-        // If an error occurs during execution, display the error message
-        echo "Error al insertar el registro: " . $stmt->error;
+    // Check if all parameters are provided and valid
+    if (is_null($x) || is_null($y) || is_null($z)) {
+        throw new Exception("Missing or invalid parameters. Ensure x, y, and z are provided as valid floats.");
     }
 
-    // Close the prepared statement
-    $stmt->close();
-} else {
-    // If parameters are missing, output an error message
-    echo "Missing parameters";
+    // Prepare an SQL query to insert the data into the player_positions table
+    $stmt = $conn->prepare("INSERT INTO `player_positions`(`x`, `y`, `z`) VALUES (?, ?, ?)");
+    if (!$stmt) {
+        throw new Exception("Failed to prepare SQL statement: " . $conn->error);
+    }
+
+    // Bind parameters (float, float, float) to the SQL query
+    if (!$stmt->bind_param("ddd", $x, $y, $z)) {
+        throw new Exception("Failed to bind parameters: " . $stmt->error);
+    }
+
+    // Execute the SQL query
+    if (!$stmt->execute()) {
+        throw new Exception("Failed to execute SQL statement: " . $stmt->error);
+    }
+
+    // Get the last inserted ID from the database (auto-increment field)
+    $last_id = $conn->insert_id;
+    echo json_encode([
+        "success" => true,
+        "message" => "Record inserted successfully.",
+        "last_id" => $last_id
+    ]);
+
+} catch (Exception $e) {
+    // Return a JSON error response with the exception message
+    echo json_encode([
+        "success" => false,
+        "error" => $e->getMessage()
+    ]);
+} finally {
+    // Close the prepared statement if it exists
+    if (isset($stmt) && $stmt) {
+        $stmt->close();
+    }
+
+    // Close the database connection
+    if (isset($conn) && $conn) {
+        $conn->close();
+    }
 }
-
-// Close the database connection
-$conn->close();
-
 ?>
