@@ -1,7 +1,7 @@
 1. Abrir Filezilla:
 
 	Amfitrió: sftp://citmalumnes.upc.es
-	User y password: (Del excel) Usamos mariogs5
+	User y password: (Del excel) Usamos mariogs5 / 49240835c
 
 2. De izq. a der. metes los archivos a public.html para tenerlo en el server
 
