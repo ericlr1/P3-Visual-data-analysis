@@ -9,11 +9,14 @@ public class DatabaseSend : MonoBehaviour
     // Reference to the script holding the player's data
     public GetPlayerData playerReference;
 
-    private string serverURL = "https://citmalumnes.upc.es/~mariogs5/"; 
+    private string serverURL = "https://citmalumnes.upc.es/~mariogs5/";
+    private int sessionID = -1; // ID of the session in the database
 
     // Start is called before the first frame update
     void Start()
     {
+        StartSession();
+
         // Start the coroutine to send player position
         StartCoroutine(SendPlayerPositionCoroutine());
     }
@@ -24,13 +27,21 @@ public class DatabaseSend : MonoBehaviour
 
     }
 
-    private IEnumerator SendDataToServer(string url, Dictionary<string, string> data)
+    void OnApplicationQuit()
+    {
+        EndSession();
+    }
+
+    private IEnumerator SendDataToServer(string url, Dictionary<string, string> data, System.Action<string> callback = null)
     {
         WWWForm form = new WWWForm();
 
-        foreach (var entry in data)
+        if (data != null)
         {
-            form.AddField(entry.Key, entry.Value);
+            foreach (var entry in data)
+            {
+                form.AddField(entry.Key, entry.Value);
+            }
         }
 
         using (UnityWebRequest request = UnityWebRequest.Post(url, form))
@@ -39,6 +50,7 @@ public class DatabaseSend : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
+                callback?.Invoke(request.downloadHandler.text);
                 Debug.Log($"Data sent to the server successfully: {request.downloadHandler.text}");
             }
             else
@@ -77,4 +89,48 @@ public class DatabaseSend : MonoBehaviour
     }
 
     #endregion
+
+    #region SESSION MANAGEMENT
+
+    private void StartSession()
+    {
+        string startSessionURL = serverURL + "StartSession.php";
+
+        StartCoroutine(SendDataToServer(startSessionURL, null, (response) =>
+        {
+            if (int.TryParse(response, out int id))
+            {
+                sessionID = id;
+                Debug.Log($"Session started with ID: {sessionID}");
+            }
+            else
+            {
+                Debug.LogError("Failed to parse session ID from response.");
+            }
+        }));
+    }
+
+    private void EndSession()
+    {
+        if (sessionID == -1)
+        {
+            Debug.LogWarning("No session to end.");
+            return;
+        }
+
+        string endSessionURL = serverURL + "EndSession.php";
+
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() }
+        };
+
+        StartCoroutine(SendDataToServer(endSessionURL, data, (response) =>
+        {
+            Debug.Log($"Session {sessionID} ended: {response}");
+        }));
+    }
+
+    #endregion
+
 }
