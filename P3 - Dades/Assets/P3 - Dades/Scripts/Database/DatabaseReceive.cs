@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
 
-public class RetrievePlayerPositions : MonoBehaviour
+public class DatabaseReceive : MonoBehaviour
 {
     // URL of the PHP script
     private string url = "https://citmalumnes.upc.es/~mariogs5/RetrievePosition.php";
 
     // List to store retrieved positions
-    public List<Vector3> playerPositions = new List<Vector3>();
+    public List<Vector4> playerPositions = new List<Vector4>();
 
     void Start()
     {
@@ -40,7 +40,7 @@ public class RetrievePlayerPositions : MonoBehaviour
                     // Populate the Vector3 list
                     foreach (var position in responseData.positions)
                     {
-                        playerPositions.Add(new Vector3(position.x, position.y, position.z));
+                        playerPositions.Add(new Vector4(position.x, position.y, position.z, position.time));
                     }
 
                     Debug.Log("Player positions successfully retrieved!");
@@ -72,5 +72,6 @@ public class RetrievePlayerPositions : MonoBehaviour
         public float x;
         public float y;
         public float z;
+        public float time;
     }
 }

@@ -23578,7 +23578,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2034418527}
-  playerPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &945916858 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4111328061247126, guid: e9569c7e13e51264082910415a120d38,
@@ -152505,15 +152504,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4405054866690174, guid: 1fac0dae54de3224181696b709bb4d66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.840004
+      value: 0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 4405054866690174, guid: 1fac0dae54de3224181696b709bb4d66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.9929976
+      value: 1.8800001
       objectReference: {fileID: 0}
     - target: {fileID: 4405054866690174, guid: 1fac0dae54de3224181696b709bb4d66, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 62.059998
+      value: -3.999998
       objectReference: {fileID: 0}
     - target: {fileID: 4405054866690174, guid: 1fac0dae54de3224181696b709bb4d66, type: 3}
       propertyPath: m_LocalRotation.w
@@ -161807,7 +161806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb6896d308cfb8f40b10dd135e79a1e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 934693019}
+  playerReference: {fileID: 934693019}
 --- !u!1001 &2109009562
 PrefabInstance:
   m_ObjectHideFlags: 0

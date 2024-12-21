@@ -4,7 +4,7 @@ include 'DatabaseConnect.php';
 
 try {
     // Prepare an SQL query to select all rows from the player_positions table
-    $stmt = $conn->prepare("SELECT `x`, `y`, `z` FROM `player_positions`");
+    $stmt = $conn->prepare("SELECT `x`, `y`, `z`, `time` FROM `player_positions`");
     if (!$stmt) {
         throw new Exception("Failed to prepare SQL statement: " . $conn->error);
     }
@@ -22,7 +22,8 @@ try {
         $positions[] = [
             "x" => (float) $row["x"],
             "y" => (float) $row["y"],
-            "z" => (float) $row["z"]
+            "z" => (float) $row["z"],
+            "time" => (float) $row["time"]
         ];
     }
 

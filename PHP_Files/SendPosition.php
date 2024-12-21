@@ -7,20 +7,21 @@ try {
     $x = isset($_POST["x"]) ? floatval($_POST["x"]) : null; // Get 'x' or null if not provided
     $y = isset($_POST["y"]) ? floatval($_POST["y"]) : null; // Get 'y' or null if not provided
     $z = isset($_POST["z"]) ? floatval($_POST["z"]) : null; // Get 'z' or null if not provided
+    $time = isset($_POST["time"]) ? floatval($_POST["time"]) : null; // Get 'z' or null if not provided
 
     // Check if all parameters are provided and valid
-    if (is_null($x) || is_null($y) || is_null($z)) {
-        throw new Exception("Missing or invalid parameters. Ensure x, y, and z are provided as valid floats.");
+    if (is_null($x) || is_null($y) || is_null($z) || is_null($time)) {
+        throw new Exception("Missing or invalid parameters. Ensure x, y, z and time are provided as valid floats.");
     }
 
     // Prepare an SQL query to insert the data into the player_positions table
-    $stmt = $conn->prepare("INSERT INTO `player_positions`(`x`, `y`, `z`) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO `player_positions`(`x`, `y`, `z`, `time`) VALUES (?, ?, ?, ?)");
     if (!$stmt) {
         throw new Exception("Failed to prepare SQL statement: " . $conn->error);
     }
 
-    // Bind parameters (float, float, float) to the SQL query
-    if (!$stmt->bind_param("ddd", $x, $y, $z)) {
+    // Bind parameters (double, double, double, double) to the SQL query
+    if (!$stmt->bind_param("dddd", $x, $y, $z, $time)) {
         throw new Exception("Failed to bind parameters: " . $stmt->error);
     }
 
