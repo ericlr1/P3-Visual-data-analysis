@@ -12,7 +12,7 @@ try {
     }
 
     // Prepare an SQL query to insert the data into the player_positions table
-    $stmt = $conn->prepare("UPDATE `sessions` SET endTime = NOW() WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE `sessions` SET endTime = NOW() WHERE sessionID = ?");
     if (!$stmt) {
         throw new Exception("Failed to prepare SQL statement: " . $conn->error);
     }

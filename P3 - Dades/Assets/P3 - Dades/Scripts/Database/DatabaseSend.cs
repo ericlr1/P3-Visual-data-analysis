@@ -16,9 +16,6 @@ public class DatabaseSend : MonoBehaviour
     void Start()
     {
         StartSession();
-
-        // Start the coroutine to send player position
-        StartCoroutine(SendPlayerPositionCoroutine());
     }
 
     // Update is called once per frame
@@ -60,36 +57,6 @@ public class DatabaseSend : MonoBehaviour
         }
     }
 
-    #region PLAYER POSITION
-
-    IEnumerator SendPlayerPositionCoroutine()
-    {
-        while (true)
-        {
-            SendPlayerPosition(playerReference.GetCurrentPlayerData());
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    private void SendPlayerPosition(PlayerData playerData)
-    {
-        string sendPositionURL = serverURL + "SendPosition.php";
-
-        // Prepare data to send
-        Dictionary<string, string> data = new Dictionary<string, string>
-        {
-            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
-            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
-            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
-            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) }
-        };
-
-        // Start the coroutine to send the data
-        StartCoroutine(SendDataToServer(sendPositionURL, data));
-    }
-
-    #endregion
-
     #region SESSION MANAGEMENT
 
     private void StartSession()
@@ -102,6 +69,9 @@ public class DatabaseSend : MonoBehaviour
             {
                 sessionID = id;
                 Debug.Log($"Session started with ID: {sessionID}");
+
+                // Start the coroutine to send player position
+                StartCoroutine(SendPlayerPositionCoroutine());
             }
             else
             {
@@ -129,6 +99,43 @@ public class DatabaseSend : MonoBehaviour
         {
             Debug.Log($"Session {sessionID} ended: {response}");
         }));
+    }
+
+    #endregion
+
+    #region PLAYER POSITION
+
+    IEnumerator SendPlayerPositionCoroutine()
+    {
+        // Wait until the sessionID is valid (sessionID > 0)
+        while (sessionID == -1)
+        {
+            yield return null;
+        }
+
+        while (true)
+        {
+            SendPlayerPosition(playerReference.GetCurrentPlayerData());
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    private void SendPlayerPosition(PlayerData playerData)
+    {
+        string sendPositionURL = serverURL + "SendPosition.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendPositionURL, data));
     }
 
     #endregion
