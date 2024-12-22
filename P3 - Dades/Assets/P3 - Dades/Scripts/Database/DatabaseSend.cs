@@ -15,7 +15,9 @@ public class DatabaseSend : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartSession();
+        // Creates a new user and starts a new session.
+        // Then it starts tracking the position of the player and the game time elapsed.
+        CreateUser();
     }
 
     // Update is called once per frame
@@ -57,13 +59,58 @@ public class DatabaseSend : MonoBehaviour
         }
     }
 
+    #region USER CREATION
+
+    public void CreateUser()
+    {
+        string createUserURL = serverURL + "CreateUser.php";
+
+        User user = User.CreateNewUser();
+
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "name", user.name },
+            { "country", user.country },
+            { "age", user.age.ToString() },
+            { "gender", user.gender }
+        };
+
+        StartCoroutine(SendDataToServer(createUserURL, data, (response) =>
+        {
+            if (int.TryParse(response, out int id))
+            {
+                user.userID = id;
+                Debug.Log($"User created with ID: {user.userID}");
+
+                StartSession(user.userID);
+            }
+            else
+            {
+                Debug.LogError("Failed to parse user ID from response.");
+            }
+        }));
+    }
+
+    #endregion
+
     #region SESSION MANAGEMENT
 
-    private void StartSession()
+    private void StartSession(int userID)
     {
+        if (userID == -1)
+        {
+            Debug.LogError("Cannot start session. UserID is invalid.");
+            return;
+        }
+
         string startSessionURL = serverURL + "StartSession.php";
 
-        StartCoroutine(SendDataToServer(startSessionURL, null, (response) =>
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "userID", userID.ToString() }
+        };
+
+        StartCoroutine(SendDataToServer(startSessionURL, data, (response) =>
         {
             if (int.TryParse(response, out int id))
             {
