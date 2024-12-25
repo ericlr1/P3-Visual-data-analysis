@@ -1,6 +1,8 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class GetPlayerData : MonoBehaviour
 {
@@ -62,5 +64,13 @@ public class GetPlayerData : MonoBehaviour
     public void OnHeal()
     {
         playerData.hasHealed = true;
+    }
+
+    public void OnPlayerHit(string target, int damageDealt)
+    {
+        playerData.hasHit = true;
+
+        playerData.target = target;
+        playerData.damageDealt = damageDealt;
     }
 }

@@ -19,12 +19,14 @@ public class DatabaseSend : MonoBehaviour
     private float damageCooldown = 0.5f;
     private float healCooldown = 0.5f;
     private float respawnCooldown = 0.5f;
+    private float hitCooldown = 0.1f;
 
     private float lastJumpSendTime = -Mathf.Infinity; // Time when the last jump position was sent
     private float lastDeathSendTime = -Mathf.Infinity;
     private float lastDamageSendTime = -Mathf.Infinity;
     private float lastHealSendTime = -Mathf.Infinity;
     private float lastRespawnSendTime = -Mathf.Infinity;
+    private float lastHitSendTime = -Mathf.Infinity;
 
     #endregion
 
@@ -113,6 +115,21 @@ public class DatabaseSend : MonoBehaviour
 
             // Reset the boolean immediately
             playerReference.playerData.hasRespawned = false;
+        }
+
+        // Player Hit Management
+        if (playerReference.playerData.hasHit)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastHitSendTime + hitCooldown)
+            {
+                SendPlayerHit(playerReference.playerData);
+
+                lastHitSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasHit = false;
         }
     }
 
@@ -391,4 +408,29 @@ public class DatabaseSend : MonoBehaviour
     }
 
     #endregion
+
+    #region PLAYER HIT
+
+    private void SendPlayerHit(PlayerData playerData)
+    {
+        string sendPlayerHitURL = serverURL + "SendPlayerHit.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) },
+            { "target", playerData.target },
+            { "amount", playerData.damageDealt.ToString() }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendPlayerHitURL, data));
+    }
+
+    #endregion
+
 }

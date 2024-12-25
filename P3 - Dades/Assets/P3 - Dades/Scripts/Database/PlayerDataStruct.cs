@@ -15,4 +15,9 @@ public struct PlayerData
     public string damager;
     public Vector3 damageSource;
     public int damageAmount;
+
+    // ------ OnPlayerMeleeHit ------ //
+    public bool hasHit;
+    public string target;
+    public int damageDealt;
 }

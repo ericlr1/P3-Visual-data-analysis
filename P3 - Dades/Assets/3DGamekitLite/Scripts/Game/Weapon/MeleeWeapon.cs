@@ -7,6 +7,8 @@ namespace Gamekit3D
 {
     public class MeleeWeapon : MonoBehaviour
     {
+        public GetPlayerData playerData;
+
         public int damage = 1;
 
         [System.Serializable]
@@ -56,6 +58,8 @@ namespace Gamekit3D
 
         private void Awake()
         {
+            playerData = GameObject.Find("Ellen").GetComponent<GetPlayerData>();
+
             if (hitParticlePrefab != null)
             {
                 for (int i = 0; i < PARTICLE_COUNT; ++i)
@@ -158,13 +162,16 @@ namespace Gamekit3D
         private bool CheckDamage(Collider other, AttackPoint pts)
         {
             Damageable d = other.GetComponent<Damageable>();
-            if (d == null)
+
+            if (d == null || other.gameObject.name == "Level")
             {
                 return false;
             }
 
-            if (d.gameObject == m_Owner)
+            if (d.gameObject == m_Owner || other.gameObject.name == "Ellen")
+            {
                 return true; //ignore self harm, but do not end the attack (we don't "bounce" off ourselves)
+            }
 
             if ((targetLayers.value & (1 << other.gameObject.layer)) == 0)
             {
@@ -201,6 +208,8 @@ namespace Gamekit3D
                 m_ParticlesPool[m_CurrentParticle].Play();
                 m_CurrentParticle = (m_CurrentParticle + 1) % PARTICLE_COUNT;
             }
+
+            playerData.OnPlayerHit(other.gameObject.name, damage);
 
             return true;
         }
