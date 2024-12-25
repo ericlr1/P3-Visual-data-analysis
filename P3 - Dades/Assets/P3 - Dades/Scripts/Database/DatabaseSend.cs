@@ -17,10 +17,14 @@ public class DatabaseSend : MonoBehaviour
     private float jumpCooldown = 0.5f; // Cooldown time in seconds
     private float deathCooldown = 0.5f;
     private float damageCooldown = 0.5f;
+    private float healCooldown = 0.5f;
+    private float respawnCooldown = 0.5f;
 
     private float lastJumpSendTime = -Mathf.Infinity; // Time when the last jump position was sent
     private float lastDeathSendTime = -Mathf.Infinity;
     private float lastDamageSendTime = -Mathf.Infinity;
+    private float lastHealSendTime = -Mathf.Infinity;
+    private float lastRespawnSendTime = -Mathf.Infinity;
 
     #endregion
 
@@ -79,6 +83,36 @@ public class DatabaseSend : MonoBehaviour
 
             // Reset the boolean immediately
             playerReference.playerData.hasReceivedDamage = false;
+        }
+
+        // Heal Management
+        if (playerReference.playerData.hasHealed)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastHealSendTime + healCooldown)
+            {
+                SendHealPosition(playerReference.playerData);
+
+                lastHealSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasHealed = false;
+        }
+
+        // Respawn Management
+        if (playerReference.playerData.hasRespawned)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastRespawnSendTime + respawnCooldown)
+            {
+                SendRespawnPosition(playerReference.playerData);
+
+                lastRespawnSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasRespawned = false;
         }
     }
 
@@ -314,4 +348,47 @@ public class DatabaseSend : MonoBehaviour
 
     #endregion
 
+    #region PLAYER HEALED
+
+    private void SendHealPosition(PlayerData playerData)
+    {
+        string sendHealURL = serverURL + "SendHeal.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendHealURL, data));
+    }
+
+    #endregion
+
+    #region PLAYER RESPAWN
+
+    private void SendRespawnPosition(PlayerData playerData)
+    {
+        string sendRespawnURL = serverURL + "SendRespawn.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendRespawnURL, data));
+    }
+
+    #endregion
 }

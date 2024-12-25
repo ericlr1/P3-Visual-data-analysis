@@ -8,6 +8,7 @@ public struct PlayerData
     public bool hasJumped;
     public bool hasDied;
     public bool hasRespawned;
+    public bool hasHealed;
 
     // ------ OnDamageReceived ------ //
     public bool hasReceivedDamage;

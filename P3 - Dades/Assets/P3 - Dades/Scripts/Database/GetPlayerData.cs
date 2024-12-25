@@ -58,4 +58,9 @@ public class GetPlayerData : MonoBehaviour
         playerData.damageSource = source;
         playerData.damageAmount = amount;
     }
+
+    public void OnHeal()
+    {
+        playerData.hasHealed = true;
+    }
 }
