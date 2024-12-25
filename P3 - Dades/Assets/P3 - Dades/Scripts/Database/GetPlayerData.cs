@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class GetPlayerData : MonoBehaviour
 {
-    public GameObject player; // Reference to the player object
-    private PlayerData playerData; // Encapsulated player data
+    private GameObject player; // Reference to the player object
+
+    public PlayerData playerData; // Player data
 
     // Start is called before the first frame update
     void Start()
     {
+        player = gameObject;
         playerData.timeElapsed = 0f;
     }
 
@@ -33,9 +35,14 @@ public class GetPlayerData : MonoBehaviour
         }
     }
 
-    // Method to get the current player data
-    public PlayerData GetCurrentPlayerData()
+    public void OnDeath()
     {
-        return playerData;
+        playerData.hasDied = true;
     }
+
+    public void OnJump()
+    {
+        playerData.hasJumped = true;
+    }
+
 }

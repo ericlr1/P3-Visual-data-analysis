@@ -12,6 +12,12 @@ public class DatabaseSend : MonoBehaviour
     private string serverURL = "https://citmalumnes.upc.es/~mariogs5/";
     private int sessionID = -1; // ID of the session in the database
 
+    private float jumpCooldown = 0.5f; // Cooldown time in seconds
+    private float deathCooldown = 0.5f;
+
+    private float lastJumpSendTime = -Mathf.Infinity; // Time when the last jump position was sent
+    private float lastDeathSendTime = -Mathf.Infinity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +29,36 @@ public class DatabaseSend : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float currentTime = Time.time;
 
+        // Jump Management
+        if (playerReference.playerData.hasJumped)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastJumpSendTime + jumpCooldown)
+            {
+                SendJumpPosition(playerReference.playerData);
+                lastJumpSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasJumped = false;
+        }
+
+        // Death Management
+        if (playerReference.playerData.hasDied)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastDeathSendTime + deathCooldown)
+            {
+                SendDeathPosition(playerReference.playerData);
+
+                lastDeathSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasDied = false;
+        }
     }
 
     void OnApplicationQuit()
@@ -162,7 +197,7 @@ public class DatabaseSend : MonoBehaviour
 
         while (true)
         {
-            SendPlayerPosition(playerReference.GetCurrentPlayerData());
+            SendPlayerPosition(playerReference.playerData);
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -183,6 +218,50 @@ public class DatabaseSend : MonoBehaviour
 
         // Start the coroutine to send the data
         StartCoroutine(SendDataToServer(sendPositionURL, data));
+    }
+
+    #endregion
+
+    #region PLAYER DEATH
+
+    private void SendDeathPosition(PlayerData playerData)
+    {
+        string sendDeathURL = serverURL + "SendDeath.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendDeathURL, data));
+    }
+
+    #endregion
+
+    #region PLAYER JUMP
+
+    private void SendJumpPosition(PlayerData playerData)
+    {
+        string sendDeathURL = serverURL + "SendJump.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendDeathURL, data));
     }
 
     #endregion

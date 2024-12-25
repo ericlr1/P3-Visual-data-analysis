@@ -9,6 +9,8 @@ namespace Gamekit3D
     [RequireComponent(typeof(Animator))]
     public class PlayerController : MonoBehaviour, IMessageReceiver
     {
+        private GetPlayerData playerData;
+
         protected static PlayerController s_Instance;
         public static PlayerController instance { get { return s_Instance; } }
 
@@ -142,6 +144,8 @@ namespace Gamekit3D
         // Called automatically by Unity when the script first exists in the scene.
         void Awake()
         {
+            playerData = GetComponent<GetPlayerData>();
+
             m_Input = GetComponent<PlayerInput>();
             m_Animator = GetComponent<Animator>();
             m_CharCtrl = GetComponent<CharacterController>();
@@ -285,6 +289,8 @@ namespace Gamekit3D
                 // If jump is held, Ellen is ready to jump and not currently in the middle of a melee combo...
                 if (m_Input.JumpInput && m_ReadyToJump && !m_InCombo)
                 {
+                    playerData.OnJump();
+
                     // ... then override the previously set vertical speed and make sure she cannot jump again.
                     m_VerticalSpeed = jumpSpeed;
                     m_IsGrounded = false;
@@ -672,6 +678,8 @@ namespace Gamekit3D
         // Called by OnReceiveMessage and by DeathVolumes in the scene.
         public void Die(Damageable.DamageMessage damageMessage)
         {
+            playerData.OnDeath();
+
             m_Animator.SetTrigger(m_HashDeath);
             m_ForwardSpeed = 0f;
             m_VerticalSpeed = 0f;
