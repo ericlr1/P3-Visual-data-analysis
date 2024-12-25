@@ -45,4 +45,17 @@ public class GetPlayerData : MonoBehaviour
         playerData.hasJumped = true;
     }
 
+    public void OnRespawn()
+    {
+        playerData.hasRespawned = true;
+    }
+
+    public void OnDamaged(string damager, Vector3 source, int amount)
+    {
+        playerData.hasReceivedDamage = true;
+
+        playerData.damager = damager;
+        playerData.damageSource = source;
+        playerData.damageAmount = amount;
+    }
 }

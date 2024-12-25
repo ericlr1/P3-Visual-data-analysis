@@ -12,11 +12,17 @@ public class DatabaseSend : MonoBehaviour
     private string serverURL = "https://citmalumnes.upc.es/~mariogs5/";
     private int sessionID = -1; // ID of the session in the database
 
+    #region DATABASE COOLDOWNS
+
     private float jumpCooldown = 0.5f; // Cooldown time in seconds
     private float deathCooldown = 0.5f;
+    private float damageCooldown = 0.5f;
 
     private float lastJumpSendTime = -Mathf.Infinity; // Time when the last jump position was sent
     private float lastDeathSendTime = -Mathf.Infinity;
+    private float lastDamageSendTime = -Mathf.Infinity;
+
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +64,21 @@ public class DatabaseSend : MonoBehaviour
 
             // Reset the boolean immediately
             playerReference.playerData.hasDied = false;
+        }
+
+        // Damage Management
+        if (playerReference.playerData.hasReceivedDamage)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastDamageSendTime + damageCooldown)
+            {
+                SendDamageData(playerReference.playerData);
+
+                lastDamageSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasReceivedDamage = false;
         }
     }
 
@@ -262,6 +283,33 @@ public class DatabaseSend : MonoBehaviour
 
         // Start the coroutine to send the data
         StartCoroutine(SendDataToServer(sendDeathURL, data));
+    }
+
+    #endregion
+
+    #region PLAYER DAMAGED
+
+    private void SendDamageData(PlayerData playerData)
+    {
+        string sendDamageURL = serverURL + "SendDamage.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) },
+            { "damager", playerData.damager },
+            { "damager_x", playerData.damageSource.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "damager_y", playerData.damageSource.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "damager_z", playerData.damageSource.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "amount", playerData.damageAmount.ToString() },
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendDamageURL, data));
     }
 
     #endregion

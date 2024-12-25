@@ -7,4 +7,11 @@ public struct PlayerData
 
     public bool hasJumped;
     public bool hasDied;
+    public bool hasRespawned;
+
+    // ------ OnDamageReceived ------ //
+    public bool hasReceivedDamage;
+    public string damager;
+    public Vector3 damageSource;
+    public int damageAmount;
 }

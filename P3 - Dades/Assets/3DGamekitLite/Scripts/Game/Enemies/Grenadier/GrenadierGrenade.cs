@@ -6,6 +6,8 @@ namespace Gamekit3D
 {
     public class GrenadierGrenade : Projectile
     {
+        private GetPlayerData playerData;
+
         public enum ShotType
         {
             HIGHEST_SHOT,
@@ -44,6 +46,8 @@ namespace Gamekit3D
 
             m_VFXInstance = Instantiate(explosionVFX);
             m_VFXInstance.gameObject.SetActive(false);
+
+            playerData = GameObject.Find("Ellen").GetComponent<GetPlayerData>();
         }
 
         private void OnEnable()
@@ -104,13 +108,16 @@ namespace Gamekit3D
                 throwing = true
             };
 
-
             for (int i = 0; i < count; ++i)
             {
                 Damageable d = m_ExplosionHitCache[i].GetComponentInChildren<Damageable>();
 
                 if (d != null)
+                {
                     d.ApplyDamage(message);
+                    playerData.OnDamaged("Spit", message.damageSource, message.amount);
+                }
+                    
             }
 
             pool.Free(this);

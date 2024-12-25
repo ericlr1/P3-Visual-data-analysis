@@ -623,6 +623,8 @@ namespace Gamekit3D
         // Called by a state machine behaviour on Ellen's animator controller.
         public void RespawnFinished()
         {
+            playerData.OnRespawn();
+
             m_Respawning = false;
             
             //we set the damageable invincible so we can't get hurt just after being respawned (feel like a double punitive)
@@ -652,6 +654,9 @@ namespace Gamekit3D
         // Called by OnReceiveMessage.
         void Damaged(Damageable.DamageMessage damageMessage)
         {
+            playerData.OnDamaged(damageMessage.damager.gameObject.transform.parent.name, 
+                damageMessage.damageSource, damageMessage.amount);
+
             // Set the Hurt parameter of the animator.
             m_Animator.SetTrigger(m_HashHurt);
 
