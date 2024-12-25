@@ -73,4 +73,10 @@ public class GetPlayerData : MonoBehaviour
         playerData.target = target;
         playerData.damageDealt = damageDealt;
     }
+
+    public void OnPlayerInteraction(string interactable)
+    {
+        playerData.hasInteracted = true;
+        playerData.interactable = interactable;
+    }
 }

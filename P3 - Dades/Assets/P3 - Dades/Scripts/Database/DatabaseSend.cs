@@ -20,6 +20,7 @@ public class DatabaseSend : MonoBehaviour
     private float healCooldown = 0.5f;
     private float respawnCooldown = 0.5f;
     private float hitCooldown = 0.1f;
+    private float interactionCooldown = 0.2f;
 
     private float lastJumpSendTime = -Mathf.Infinity; // Time when the last jump position was sent
     private float lastDeathSendTime = -Mathf.Infinity;
@@ -27,6 +28,7 @@ public class DatabaseSend : MonoBehaviour
     private float lastHealSendTime = -Mathf.Infinity;
     private float lastRespawnSendTime = -Mathf.Infinity;
     private float lastHitSendTime = -Mathf.Infinity;
+    private float lastInteractionSendTime = -Mathf.Infinity;
 
     #endregion
 
@@ -130,6 +132,21 @@ public class DatabaseSend : MonoBehaviour
 
             // Reset the boolean immediately
             playerReference.playerData.hasHit = false;
+        }
+
+        // Player Interaction Management
+        if (playerReference.playerData.hasInteracted)
+        {
+            // Check cooldown and send data if allowed
+            if (currentTime >= lastInteractionSendTime + interactionCooldown)
+            {
+                SendPlayerInteraction(playerReference.playerData);
+
+                lastInteractionSendTime = currentTime; // Update the last send time
+            }
+
+            // Reset the boolean immediately
+            playerReference.playerData.hasInteracted = false;
         }
     }
 
@@ -429,6 +446,29 @@ public class DatabaseSend : MonoBehaviour
 
         // Start the coroutine to send the data
         StartCoroutine(SendDataToServer(sendPlayerHitURL, data));
+    }
+
+    #endregion
+
+    #region PLAYER INTERACTION
+
+    private void SendPlayerInteraction(PlayerData playerData)
+    {
+        string sendInteractionURL = serverURL + "SendPlayerInteraction.php";
+
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sessionID", sessionID.ToString() },
+            { "x", playerData.position.x.ToString("F3", CultureInfo.InvariantCulture) },
+            { "y", playerData.position.y.ToString("F3", CultureInfo.InvariantCulture) },
+            { "z", playerData.position.z.ToString("F3", CultureInfo.InvariantCulture) },
+            { "time", playerData.timeElapsed.ToString("F3", CultureInfo.InvariantCulture) },
+            { "interactable", playerData.interactable }
+        };
+
+        // Start the coroutine to send the data
+        StartCoroutine(SendDataToServer(sendInteractionURL, data));
     }
 
     #endregion

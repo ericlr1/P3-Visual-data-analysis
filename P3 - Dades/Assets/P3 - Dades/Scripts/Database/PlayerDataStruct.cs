@@ -20,4 +20,8 @@ public struct PlayerData
     public bool hasHit;
     public string target;
     public int damageDealt;
+
+    // ------ OnPlayerInteraction ------ //
+    public bool hasInteracted;
+    public string interactable;
 }
