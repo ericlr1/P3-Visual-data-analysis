@@ -2,25 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UIElements;
+using Newtonsoft.Json;
 
 public class DatabaseReceive : MonoBehaviour
 {
-    // URL of the PHP script
-    private string url = "https://citmalumnes.upc.es/~mariogs5/RetrievePosition.php";
+    private string serverURL = "https://citmalumnes.upc.es/~mariogs5/";
 
-    // List to store retrieved positions
-    public List<Vector4> playerPositions = new List<Vector4>();
+    public List<Database_User> dbUsers;
+    public List<Database_Session> dbSessions;
+    public List<Database_PlayerRespawn> dbPlayerRespawns;
+    public List<Database_PlayerPosition> dbPlayerPositions;
+    public List<Database_PlayerJump> dbPlayerJumps;
+    public List<Database_PlayerInteraction> dbPlayerInteractions;
+    public List<Database_PlayerHit> dbPlayerHits;
+    public List<Database_PlayerHeal> dbPlayerHeals;
+    public List<Database_PlayerDeath> dbPlayerDeaths;
+    public List<Database_PlayerDamaged> dbPlayerDamages;
+
+    void Awake()
+    {
+        dbUsers = new List<Database_User>();
+        dbSessions = new List<Database_Session>();
+        dbPlayerRespawns = new List<Database_PlayerRespawn>();
+        dbPlayerPositions = new List<Database_PlayerPosition>();
+        dbPlayerJumps = new List<Database_PlayerJump>();
+        dbPlayerInteractions = new List<Database_PlayerInteraction>();
+        dbPlayerHits = new List<Database_PlayerHit>();
+        dbPlayerHeals = new List<Database_PlayerHeal>();
+        dbPlayerDeaths = new List<Database_PlayerDeath>();
+        dbPlayerDamages = new List<Database_PlayerDamaged>();
+    }
 
     void Start()
     {
-        // Start the coroutine to fetch data
-        StartCoroutine(FetchPlayerPositions());
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrieveUsers.php", dbUsers));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrieveSessions.php", dbSessions));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerRespawns.php", dbPlayerRespawns));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerPositions.php", dbPlayerPositions));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerJumps.php", dbPlayerJumps));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerInteractions.php", dbPlayerInteractions));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths));
+        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages));
     }
 
-    IEnumerator FetchPlayerPositions()
+    private IEnumerator FetchDatabaseData<T>(string url, List<T> targetList) where T : IDatabaseEntity
     {
-        // Make a GET request to the PHP script
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
             // Send the request and wait for a response
@@ -28,50 +56,52 @@ public class DatabaseReceive : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                // Parse the JSON response
                 string jsonResponse = request.downloadHandler.text;
                 Debug.Log("Response: " + jsonResponse);
 
-                // Deserialize the JSON into a structure
-                ResponseData responseData = JsonUtility.FromJson<ResponseData>(jsonResponse);
+                // Use reflection to get the static ResponseKey
+                var responseKey = typeof(T).GetProperty("responseKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)?.GetValue(null) as string;
 
-                if (responseData.success)
+                if (responseKey != null)
                 {
-                    // Populate the Vector3 list
-                    foreach (var position in responseData.positions)
-                    {
-                        playerPositions.Add(new Vector4(position.x, position.y, position.z, position.time));
-                    }
+                    // Create a generic container
+                    GenericResponse<T> response = JsonConvert.DeserializeObject<GenericResponse<T>>(jsonResponse);
 
-                    Debug.Log("Player positions successfully retrieved!");
+                    if (response.success)
+                    {
+                        targetList.Clear();
+                        targetList.AddRange(response.GetData(responseKey));
+                        Debug.Log($"Successfully retrieved {targetList.Count} items of type {typeof(T).Name}.");
+                    }
+                    else
+                    {
+                        Debug.LogError($"Error retrieving {typeof(T).Name}: {response.error}");
+                    }
                 }
                 else
                 {
-                    Debug.LogError("Error retrieving positions: " + responseData.error);
+                    Debug.LogError($"ResponseKey not found for type {typeof(T).Name}");
                 }
             }
             else
             {
-                Debug.LogError("Request failed: " + request.error);
+                Debug.LogError($"Request failed: {request.error}");
             }
         }
     }
 
-    // Classes to deserialize JSON
     [System.Serializable]
-    public class ResponseData
+    public class GenericResponse<T>
     {
         public bool success;
-        public List<Position> positions;
         public string error;
-    }
 
-    [System.Serializable]
-    public class Position
-    {
-        public float x;
-        public float y;
-        public float z;
-        public float time;
+        // Use a dynamic field to deserialize based on the key
+        public Dictionary<string, T[]> data;
+
+        public T[] GetData(string key)
+        {
+            return data != null && data.ContainsKey(key) ? data[key] : new T[0];
+        }
     }
 }
