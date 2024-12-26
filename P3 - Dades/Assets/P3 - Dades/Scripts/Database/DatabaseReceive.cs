@@ -37,14 +37,14 @@ public class DatabaseReceive : MonoBehaviour
     {
         StartCoroutine(FetchDatabaseData(serverURL + "RetrieveUsers.php", dbUsers));
         StartCoroutine(FetchDatabaseData(serverURL + "RetrieveSessions.php", dbSessions));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerRespawns.php", dbPlayerRespawns));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerPositions.php", dbPlayerPositions));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerJumps.php", dbPlayerJumps));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerInteractions.php", dbPlayerInteractions));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths));
-        //StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerRespawns.php", dbPlayerRespawns));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerPositions.php", dbPlayerPositions));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerJumps.php", dbPlayerJumps));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerInteractions.php", dbPlayerInteractions));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths));
+        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages));
     }
 
     private IEnumerator FetchDatabaseData<T>(string url, List<T> targetList) where T : IDatabaseEntity
