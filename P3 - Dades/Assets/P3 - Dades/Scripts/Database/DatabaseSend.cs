@@ -187,8 +187,60 @@ public class DatabaseSend : MonoBehaviour
 
     public void CreateUser()
     {
+        string getUserURL = serverURL + "GetUser.php";
         string createUserURL = serverURL + "CreateUser.php";
 
+        // Define the returning user probability
+        float returningUserChance = 0.2f;
+
+        // Coroutine to check the number of users and decide the next step
+        StartCoroutine(CheckAndCreateOrReturnUser(getUserURL, createUserURL, returningUserChance));
+    }
+
+    private IEnumerator CheckAndCreateOrReturnUser(string getUserURL, string createUserURL, float returningUserChance)
+    {
+        // Check the number of users in the database by calling GetUser.php
+        bool isReturningUser = Random.value <= returningUserChance; // Random value between 0 and 1
+
+        if (isReturningUser)
+        {
+            Debug.Log("Attempting to select a returning user.");
+            // Get a random user ID from the server
+            WWWForm form = new WWWForm(); // You can use WWWForm if parameters are needed in the future
+            using (UnityWebRequest webRequest = UnityWebRequest.Post(getUserURL, form))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    string response = webRequest.downloadHandler.text;
+                    if (int.TryParse(response, out int returningUserID))
+                    {
+                        Debug.Log($"Returning user selected with ID: {returningUserID}");
+                        StartSession(returningUserID);
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to parse user ID from GetUser.php response. Creating a new user instead.");
+                        yield return CreateNewUser(createUserURL);
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Error fetching a random user: {webRequest.error}. Creating a new user instead.");
+                    yield return CreateNewUser(createUserURL);
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("No returning user selected. Creating a new user.");
+            yield return CreateNewUser(createUserURL);
+        }
+    }
+
+    public IEnumerator CreateNewUser(string createUserURL)
+    {
         User user = User.CreateNewUser();
 
         Dictionary<string, string> data = new Dictionary<string, string>
@@ -199,7 +251,7 @@ public class DatabaseSend : MonoBehaviour
             { "gender", user.gender }
         };
 
-        StartCoroutine(SendDataToServer(createUserURL, data, (response) =>
+        yield return StartCoroutine(SendDataToServer(createUserURL, data, (response) =>
         {
             if (int.TryParse(response, out int id))
             {
