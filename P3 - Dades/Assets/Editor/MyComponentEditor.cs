@@ -14,10 +14,10 @@ public class MyComponentEditor : Editor
         // Reference to the script overrided
         TileMapManager myComponent = (TileMapManager)target;
 
-        // Add Generate Tile Button
         if (GUILayout.Button("Generate Tiles"))
         {
-            myComponent.CalculateTiles();
+            // Delete Tiles
+            myComponent.GenerateTiles();
         }
 
         // Add Delete Button
