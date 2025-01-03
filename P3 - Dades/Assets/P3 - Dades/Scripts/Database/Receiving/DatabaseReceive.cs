@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using System.IO;
 
 public class DatabaseReceive : MonoBehaviour
 {
     private string serverURL = "https://citmalumnes.upc.es/~mariogs5/";
+    private string outputFilePath = "P3 - Dades/DatabaseOutput.json";
 
     public List<Database_User> dbUsers;
     public List<Database_Session> dbSessions;
@@ -19,7 +21,12 @@ public class DatabaseReceive : MonoBehaviour
     public List<Database_PlayerDeath> dbPlayerDeaths;
     public List<Database_PlayerDamaged> dbPlayerDamages;
 
-    void Awake()
+    public void Awake()
+    {
+        ReceiveDataButton();
+    }
+
+    public void ReceiveDataButton()
     {
         dbUsers = new List<Database_User>();
         dbSessions = new List<Database_Session>();
@@ -31,26 +38,35 @@ public class DatabaseReceive : MonoBehaviour
         dbPlayerHeals = new List<Database_PlayerHeal>();
         dbPlayerDeaths = new List<Database_PlayerDeath>();
         dbPlayerDamages = new List<Database_PlayerDamaged>();
+
+        StartCoroutine(FetchAllDatabaseData());
     }
 
-    void Start()
+    private IEnumerator FetchAllDatabaseData()
     {
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrieveUsers.php", dbUsers));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrieveSessions.php", dbSessions));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerRespawns.php", dbPlayerRespawns));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerPositions.php", dbPlayerPositions));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerJumps.php", dbPlayerJumps));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerInteractions.php", dbPlayerInteractions));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths));
-        StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages));
-    }
+        // A list of all fetch operations
+        List<IEnumerator> fetchOperations = new List<IEnumerator>
+        {
+            FetchDatabaseData(serverURL + "RetrieveUsers.php", dbUsers),
+            FetchDatabaseData(serverURL + "RetrieveSessions.php", dbSessions),
+            FetchDatabaseData(serverURL + "RetrievePlayerRespawns.php", dbPlayerRespawns),
+            FetchDatabaseData(serverURL + "RetrievePlayerPositions.php", dbPlayerPositions),
+            FetchDatabaseData(serverURL + "RetrievePlayerJumps.php", dbPlayerJumps),
+            FetchDatabaseData(serverURL + "RetrievePlayerInteractions.php", dbPlayerInteractions),
+            FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits),
+            FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals),
+            FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths),
+            FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages)
+        };
 
-    public void ReceiveDataButton()
-    {
-        Awake();
-        Start();
+        // Start all fetch operations and wait for them to complete
+        foreach (var operation in fetchOperations)
+        {
+            yield return StartCoroutine(operation);
+        }
+
+        // Once all are done, export the data
+        ExportDatabaseToFile();
     }
 
     private IEnumerator FetchDatabaseData<T>(string url, List<T> targetList) where T : IDatabaseEntity
@@ -108,6 +124,36 @@ public class DatabaseReceive : MonoBehaviour
         public T[] GetData(string key)
         {
             return data != null && data.ContainsKey(key) ? data[key] : new T[0];
+        }
+    }
+
+    public void ExportDatabaseToFile()
+    {
+        var exportData = new
+        {
+            Users = dbUsers,
+            Sessions = dbSessions,
+            PlayerRespawns = dbPlayerRespawns,
+            PlayerPositions = dbPlayerPositions,
+            PlayerJumps = dbPlayerJumps,
+            PlayerInteractions = dbPlayerInteractions,
+            PlayerHits = dbPlayerHits,
+            PlayerHeals = dbPlayerHeals,
+            PlayerDeaths = dbPlayerDeaths,
+            PlayerDamages = dbPlayerDamages
+        };
+
+        string jsonOutput = JsonConvert.SerializeObject(exportData, Formatting.Indented);
+
+        try
+        {
+            string filePath = Path.Combine(Application.dataPath, outputFilePath);
+            File.WriteAllText(filePath, jsonOutput);
+            Debug.Log($"Database data successfully exported to {filePath}");
+        }
+        catch (IOException e)
+        {
+            Debug.LogError($"Failed to write database data to file: {e.Message}");
         }
     }
 }
