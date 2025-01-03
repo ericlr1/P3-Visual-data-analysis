@@ -24,7 +24,7 @@ public class UserAttributes
         "Clara", "Declan", "Eloise", "Flynn", "Gemma", "Hugo", "Isabel", "James", "Kylie",
         "Liam", "Maxwell", "Natalie", "Omar", "Paisley", "Reagan", "Sarah", "Toby",
         "Ulani", "Violet", "Wren", "Ximena", "Yara", "Zara", "Aria", "Beau", "Camila",
-        "Dean", "Emmett", "Freya", "Grayson", "Harper", "Ivy", "Jasper", "Kennedy",
+        "Dean", "Emmett", "Freya", "Grayson", "Harper", "Jasper", "Kennedy",
         "Leila", "Mila", "Nolan", "Odelia", "Penelope", "Ronan", "Skye", "Tessa",
         "Uriah", "Vera", "Willa", "Xavier", "Yuna", "Zayden"
     };
