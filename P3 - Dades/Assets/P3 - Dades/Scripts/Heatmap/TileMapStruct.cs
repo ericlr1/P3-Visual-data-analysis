@@ -12,6 +12,6 @@ public struct TileMap
     public int columns; // Number of Columns will have the HeatMap
     public int width;   // Width of the Map that want to be covered
     public int height;  // Height of the Map that want to be covered
-    
-    public List<IDatabaseEntity> skibidi;
+
+    public List<IDatabaseEntity> filteredList;
 }

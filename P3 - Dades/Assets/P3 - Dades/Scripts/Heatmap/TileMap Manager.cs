@@ -34,16 +34,17 @@ public class TileMapManager : MonoBehaviour
             heatMap = parent.GetComponent<EditHeatMap>();
         }
 
-        tileMap.skibidi = new List<IDatabaseEntity>();
+        tileMap.filteredList = new List<IDatabaseEntity>();
         tileMap.prefab = tilePrefab;
         tileMap.parent = parent;
         tileMap.rows = rows;
         tileMap.columns = columns;
         tileMap.width = mapX;
         tileMap.height = mapZ;
-        tileMap.skibidi.AddRange(dataRecieve.dbPlayerInteractions);
 
-        //Debug.Log(tileMap.skibidi);
+        tileMap.filteredList.AddRange(dataRecieve.dbPlayerInteractions);
+        tileMap.filteredList.AddRange(dataRecieve.dbUsers);
+        tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
 
         heatMap.GenerateTiles();
     }
