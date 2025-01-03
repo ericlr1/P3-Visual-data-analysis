@@ -47,6 +47,12 @@ public class DatabaseReceive : MonoBehaviour
         StartCoroutine(FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages));
     }
 
+    public void ReceiveDataButton()
+    {
+        Awake();
+        Start();
+    }
+
     private IEnumerator FetchDatabaseData<T>(string url, List<T> targetList) where T : IDatabaseEntity
     {
         using (UnityWebRequest request = UnityWebRequest.Get(url))
