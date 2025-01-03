@@ -56,9 +56,19 @@ public class UserAttributes
 
     #endregion
 
+    public static string[] GetNameArray()
+    {
+        return names;
+    }
+
     public static string[] GetCountryArray()
     {
         return countries;
+    }
+
+    public static string[] GetGenderArray()
+    {
+        return genders;
     }
 
     public static string GenerateRandomName()
