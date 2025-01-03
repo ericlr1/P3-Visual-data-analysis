@@ -56,6 +56,11 @@ public class UserAttributes
 
     #endregion
 
+    public static string[] GetCountryArray()
+    {
+        return countries;
+    }
+
     public static string GenerateRandomName()
     {
         return names[Random.Range(0, names.Length)];
