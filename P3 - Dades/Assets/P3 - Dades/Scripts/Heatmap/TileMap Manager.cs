@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
@@ -8,6 +9,8 @@ public class TileMapManager : MonoBehaviour
 {
     // TileMap Data
     public static TileMap tileMap;
+
+    [SerializeField] private DatabaseReceive dataRecieve;
 
     [SerializeField] private GameObject tilePrefab;
 
@@ -24,18 +27,23 @@ public class TileMapManager : MonoBehaviour
 
     public void GenerateTiles()
     {
+        
         if (parent == null)
         {
             parent = GameObject.Find("Tiles Parent");
             heatMap = parent.GetComponent<EditHeatMap>();
         }
 
+        tileMap.skibidi = new List<IDatabaseEntity>();
         tileMap.prefab = tilePrefab;
         tileMap.parent = parent;
         tileMap.rows = rows;
         tileMap.columns = columns;
         tileMap.width = mapX;
         tileMap.height = mapZ;
+        tileMap.skibidi.AddRange(dataRecieve.dbPlayerInteractions);
+
+        //Debug.Log(tileMap.skibidi);
 
         heatMap.GenerateTiles();
     }

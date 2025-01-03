@@ -20,7 +20,7 @@ public class EditHeatMap : MonoBehaviour
 
     // Manager Vars
     private GameObject parent;
-    private List<GameObject> tiles;
+    public List<GameObject> tiles;
 
     public void GenerateTiles()
     {
