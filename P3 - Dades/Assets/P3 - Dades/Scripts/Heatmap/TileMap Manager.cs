@@ -24,7 +24,7 @@ public class TileMapManager : MonoBehaviour
     #endregion
 
     //Filter Settings object
-    public static MapFilterSettings filterSettings;
+    public static FilterSettings filterSettings;
 
     // TileMap Data
     public static TileMap tileMap;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public struct MapFilterSettings
+public struct FilterSettings
 {
     // TODO: Podriamos cambiar esto por un diccionario o algo asi para no
     // tener que mirar toda la información del Struct cada vez que querramos aplicar los filtros
