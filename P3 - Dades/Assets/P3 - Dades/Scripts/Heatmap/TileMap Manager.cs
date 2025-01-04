@@ -53,7 +53,6 @@ public class TileMapManager : MonoBehaviour
             heatMap = parent.GetComponent<EditHeatMap>();
         }
 
-        tileMap.filteredList = new List<IDatabaseEntity>();
         tileMap.prefab = tilePrefab;
         tileMap.parent = parent;
         tileMap.rows = rows;
@@ -83,7 +82,11 @@ public class TileMapManager : MonoBehaviour
             GenerateTiles();
         }
 
-
+        if (tileMap.filteredList == null)
+        {
+            tileMap.filteredList = new List<IDatabaseEntity>();
+        }
+        
         //Check if any filter is being used
         #region Filters
         if (applyCountryFilter)

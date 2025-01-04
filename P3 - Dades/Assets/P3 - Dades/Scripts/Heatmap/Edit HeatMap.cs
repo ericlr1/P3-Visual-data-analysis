@@ -103,15 +103,12 @@ public class EditHeatMap : MonoBehaviour
 
     public void ApplyFilters(FilterSettings filterSettings)
     {
-        //TODO: Esta función seria la encargada de cambiar el color en base a los filtros activos
-        //TileMapManager.tileMap.filteredList;
-
         //Vaciamos la lista al inicio
         TileMapManager.tileMap.filteredList.Clear();
 
         if ((filterSettings.activeFilters & FilterType.Country) != 0)
         {
-
+            
         }
 
         if ((filterSettings.activeFilters & FilterType.Gender) != 0)
@@ -123,5 +120,11 @@ public class EditHeatMap : MonoBehaviour
         {
             
         }
+
+        //TODO: Hacer la consulta a SQL según los filtros
+
+
+
+        //Debug.Log(TileMapManager.tileMap.filteredList[0]);
     }
 }
