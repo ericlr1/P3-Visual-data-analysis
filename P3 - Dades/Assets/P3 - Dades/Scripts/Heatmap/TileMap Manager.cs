@@ -115,4 +115,9 @@ public class TileMapManager : MonoBehaviour
         filterSettings.activeFilters = FilterType.None;
 
     }
+
+    public void TestIndex()
+    {
+        heatMap.TestTilePos();
+    }
 }

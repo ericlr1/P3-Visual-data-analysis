@@ -15,3 +15,9 @@ public struct TileMap
 
     public List<IDatabaseEntity> filteredList;
 }
+
+public struct TileStruct
+{
+    public GameObject tileGO;
+    public int heat;
+}

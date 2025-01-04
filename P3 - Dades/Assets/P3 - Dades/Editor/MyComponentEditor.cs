@@ -115,6 +115,15 @@ public class MyComponentEditor : Editor
             myComponent.ApplyFilters();
         }
 
+        Separator();
+
+        ChangeUIColor(Colors.Amber);
+
+        if (GUILayout.Button("Test Get Index Tile"))
+        {
+            myComponent.TestIndex();
+        }
+
     }
 
     #region UI Funcions
