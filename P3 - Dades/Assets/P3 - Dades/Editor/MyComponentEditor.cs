@@ -99,13 +99,22 @@ public class MyComponentEditor : Editor
                 myComponent.maxAge = myComponent.minAge;
             }
 
-            // Aply changes
+            // Apply changes
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(myComponent);
             }
         }
         #endregion
+
+        Separator();
+
+        // Apply filters button
+        if (GUILayout.Button("Apply Filters"))
+        {
+            myComponent.ApplyFilters();
+        }
+
     }
 
     #region UI Funcions

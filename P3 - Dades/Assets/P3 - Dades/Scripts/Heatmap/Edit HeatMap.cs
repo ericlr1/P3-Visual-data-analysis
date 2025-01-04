@@ -50,9 +50,9 @@ public class EditHeatMap : MonoBehaviour
                 // Cambiar el tamaño del tile
                 tile.transform.localScale = new Vector3(tileSize.x / tile.transform.localScale.x, tile.transform.localScale.y, tileSize.z / tile.transform.localScale.z);
 
-                Color randomColor = new Color(Random.value, Random.value, Random.value);
+                Color baseColor = Color.white;
                 Material randomMaterial = new Material(Shader.Find("Standard"));
-                randomMaterial.color = randomColor;
+                randomMaterial.color = baseColor;
                 tile.GetComponent<Renderer>().material = randomMaterial;
 
                 tiles.Add(tile);
@@ -93,5 +93,11 @@ public class EditHeatMap : MonoBehaviour
                 tileSize = Vector3.one;
             }
         }
+    }
+
+    public void ApplyFilters(MapFilterSettings filterSettings)
+    {
+        //TODO: Esta función seria la encargada de cambiar el color en base a los filtros activos
+        
     }
 }

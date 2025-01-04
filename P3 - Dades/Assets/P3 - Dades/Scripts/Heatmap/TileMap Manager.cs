@@ -23,6 +23,9 @@ public class TileMapManager : MonoBehaviour
     [HideInInspector] public int maxAge = 100;
     #endregion
 
+    //Filter Settings object
+    public static MapFilterSettings filterSettings;
+
     // TileMap Data
     public static TileMap tileMap;
 
@@ -67,5 +70,51 @@ public class TileMapManager : MonoBehaviour
     public void DeleteTiles()
     {
         heatMap.DeleteTiles();
+    }
+
+    public void ApplyFilters()
+    {
+        //Si nunca se han generado als tiles hacerlo con los valores por defecto
+        if (parent == null)
+        {
+            GenerateTiles();
+        }
+
+        //Reset the last used filters
+        filterSettings = default;
+
+        //Check if any filter is being used
+        #region Filters
+        if (applyCountryFilter)
+        {
+            filterSettings.selectedCountryIndex = selectedCountryIndex;
+        }
+        else
+        {
+            filterSettings.selectedCountryIndex = -1;
+        }
+
+        if (applyGenderFilter)
+        {
+            filterSettings.selectedGenderIndex = selectedGenderIndex;
+        }
+        else
+        {
+            filterSettings.selectedGenderIndex = -1;
+        }
+
+        if (applyAgeFilter)
+        {
+            filterSettings.minAge = minAge;
+            filterSettings.maxAge = maxAge;
+        }
+        else
+        {
+            filterSettings.minAge = 0;
+            filterSettings.maxAge = 100;
+        }
+        #endregion
+
+        heatMap.ApplyFilters(filterSettings);
     }
 }
