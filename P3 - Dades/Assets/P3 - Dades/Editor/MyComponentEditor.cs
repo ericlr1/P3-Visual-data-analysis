@@ -107,7 +107,7 @@ public class MyComponentEditor : Editor
         }
         #endregion
 
-        Separator();
+        Separator(5);
 
         // Apply filters button
         if (GUILayout.Button("Apply Filters"))

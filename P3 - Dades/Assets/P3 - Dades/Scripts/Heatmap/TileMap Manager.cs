@@ -44,6 +44,8 @@ public class TileMapManager : MonoBehaviour
     private GameObject parent;
     private EditHeatMap heatMap;
 
+    bool tilesCreated = false;
+
     public void GenerateTiles()
     {
         
@@ -61,27 +63,27 @@ public class TileMapManager : MonoBehaviour
         tileMap.width = mapX;
         tileMap.height = mapZ;
 
-        tileMap.filteredList.AddRange(dataRecieve.dbPlayerInteractions);
-        tileMap.filteredList.AddRange(dataRecieve.dbUsers);
-        tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
+        //TODO: Delete this
+        //tileMap.filteredList.AddRange(dataRecieve.dbPlayerInteractions);
+        //tileMap.filteredList.AddRange(dataRecieve.dbUsers);
+        //tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
 
         heatMap.GenerateTiles();
+        tilesCreated = true;
     }
     public void DeleteTiles()
     {
         heatMap.DeleteTiles();
+        tilesCreated = false;
     }
 
     public void ApplyFilters()
     {
         //Si nunca se han generado als tiles hacerlo con los valores por defecto
-        if (parent == null)
+        if (!tilesCreated)
         {
             GenerateTiles();
         }
-
-        //Reset the last used filters
-        filterSettings = default;
 
         //Check if any filter is being used
         #region Filters
@@ -89,29 +91,16 @@ public class TileMapManager : MonoBehaviour
         {
             filterSettings.selectedCountryIndex = selectedCountryIndex;
         }
-        else
-        {
-            filterSettings.selectedCountryIndex = -1;
-        }
 
         if (applyGenderFilter)
         {
             filterSettings.selectedGenderIndex = selectedGenderIndex;
-        }
-        else
-        {
-            filterSettings.selectedGenderIndex = -1;
         }
 
         if (applyAgeFilter)
         {
             filterSettings.minAge = minAge;
             filterSettings.maxAge = maxAge;
-        }
-        else
-        {
-            filterSettings.minAge = 0;
-            filterSettings.maxAge = 100;
         }
         #endregion
 
