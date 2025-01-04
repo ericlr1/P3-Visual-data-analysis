@@ -161327,6 +161327,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 732209f887e95d343b31106fa2be8f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  applyCountryFilter: 0
+  selectedCountryIndex: -1
+  applyGenderFilter: 0
+  selectedGenderIndex: -1
+  applyAgeFilter: 0
+  minAge: 82.80933
+  maxAge: 100
   dataRecieve: {fileID: 100934908}
   tilePrefab: {fileID: 660910466624755283, guid: 9d2fc988f0d9f1a43acf71c7599e29bf,
     type: 3}

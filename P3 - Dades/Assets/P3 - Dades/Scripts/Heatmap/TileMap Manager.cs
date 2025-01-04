@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
@@ -7,6 +8,21 @@ using static UnityEditor.PlayerSettings;
 
 public class TileMapManager : MonoBehaviour
 {
+    #region Filter Options
+    // Country Filter Vars
+    [HideInInspector] public bool applyCountryFilter;
+    [HideInInspector] public int selectedCountryIndex;
+
+    // Gender Filter Vars
+    [HideInInspector] public bool applyGenderFilter;
+    [HideInInspector] public int selectedGenderIndex;
+
+    // Age Filter Vars
+    [HideInInspector] public bool applyAgeFilter;
+    [HideInInspector] public int minAge = 0;
+    [HideInInspector] public int maxAge = 100;
+    #endregion
+
     // TileMap Data
     public static TileMap tileMap;
 
