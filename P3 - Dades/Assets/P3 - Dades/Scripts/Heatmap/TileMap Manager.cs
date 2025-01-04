@@ -29,8 +29,6 @@ public class TileMapManager : MonoBehaviour
     // TileMap Data
     public static TileMap tileMap;
 
-    [SerializeField] private DatabaseReceive dataRecieve;
-
     [SerializeField] private GameObject tilePrefab;
 
     // Grid Vars
@@ -85,25 +83,33 @@ public class TileMapManager : MonoBehaviour
             GenerateTiles();
         }
 
+
         //Check if any filter is being used
         #region Filters
         if (applyCountryFilter)
         {
             filterSettings.selectedCountryIndex = selectedCountryIndex;
+            filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Country;
         }
 
         if (applyGenderFilter)
         {
             filterSettings.selectedGenderIndex = selectedGenderIndex;
+            filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Gender;
         }
 
         if (applyAgeFilter)
         {
             filterSettings.minAge = minAge;
             filterSettings.maxAge = maxAge;
+            filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Age;
         }
         #endregion
 
         heatMap.ApplyFilters(filterSettings);
+
+        //Reset activeFilters
+        filterSettings.activeFilters = FilterType.None;
+
     }
 }

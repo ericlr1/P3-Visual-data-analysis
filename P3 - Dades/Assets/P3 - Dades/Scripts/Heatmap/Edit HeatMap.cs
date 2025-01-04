@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -21,6 +24,9 @@ public class EditHeatMap : MonoBehaviour
     // Manager Vars
     private GameObject parent;
     public List<GameObject> tiles;
+
+    // Database Object
+    [SerializeField] private DatabaseReceive dataRecieve;
 
     public void GenerateTiles()
     {
@@ -95,9 +101,27 @@ public class EditHeatMap : MonoBehaviour
         }
     }
 
-    public void ApplyFilters(MapFilterSettings filterSettings)
+    public void ApplyFilters(FilterSettings filterSettings)
     {
         //TODO: Esta función seria la encargada de cambiar el color en base a los filtros activos
-        
+        //TileMapManager.tileMap.filteredList;
+
+        //Vaciamos la lista al inicio
+        TileMapManager.tileMap.filteredList.Clear();
+
+        if ((filterSettings.activeFilters & FilterType.Country) != 0)
+        {
+
+        }
+
+        if ((filterSettings.activeFilters & FilterType.Gender) != 0)
+        {
+            
+        }
+
+        if ((filterSettings.activeFilters & FilterType.Age) != 0)
+        {
+            
+        }
     }
 }

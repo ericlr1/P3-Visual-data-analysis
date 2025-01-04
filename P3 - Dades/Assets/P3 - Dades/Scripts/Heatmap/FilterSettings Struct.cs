@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 
+[System.Flags]
+public enum FilterType
+{
+    None = 0,          // 0000 (binario)
+    Country = 1 << 0,  // 0001 (binario) = 1
+    Gender = 1 << 1,   // 0010 (binario) = 2
+    Age = 1 << 2       // 0100 (binario) = 4
+}
 public struct FilterSettings
 {
-    // TODO: Podriamos cambiar esto por un diccionario o algo asi para no
-    // tener que mirar toda la información del Struct cada vez que querramos aplicar los filtros
-
-    //public List<bool> filters;
+    public FilterType activeFilters;
 
     public int selectedCountryIndex;
 
