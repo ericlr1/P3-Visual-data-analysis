@@ -19,5 +19,5 @@ public struct TileMap
 public struct TileStruct
 {
     public GameObject tileGO;
-    public int heat;
+    public float heat;
 }

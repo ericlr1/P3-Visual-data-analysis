@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class EditHeatMap : MonoBehaviour
@@ -141,34 +143,81 @@ public class EditHeatMap : MonoBehaviour
 
     public void TestTilePos()
     {
+        TileMapManager.tileMap.filteredList.AddRange(dataRecieve.dbPlayerPositions);
+
         // Temp
-        Vector3 pos = new Vector3();
-        pos = tempCube.transform.position;
+        //Vector3 pos = new Vector3();
+        //pos = tempCube.transform.position;
 
         // To Do: Hacer una funcion que itere por todas las posiciones y haga cosas con los GOs
-        int index = GetTileIndex.GetTileIndexFromPosition(pos, TileMapManager.tileMap.rows, TileMapManager.tileMap.columns, startX - (tileSize.x / 2), startZ + (tileSize.z / 2), tileSize);
+        //int index = GetTileIndex.GetTileIndexFromPosition(pos, TileMapManager.tileMap.rows, TileMapManager.tileMap.columns, startX - (tileSize.x / 2), startZ + (tileSize.z / 2), tileSize);
 
-        Color baseColor = Color.red;
-        Material randomMaterial = new Material(Shader.Find("Standard"));
-        randomMaterial.color = baseColor;
-        tiles[index].tileGO.GetComponent<Renderer>().material = randomMaterial;
-
-        // Sumar 1 al Heat
-        TileStruct tempTile = tiles[index];
-        tempTile.heat++;                  
-        tiles[index] = tempTile;
-
-        Debug.Log("Tile: " + index + "Calor: " + tiles[index].heat);
+        //Color baseColor = Color.red;
+        //Material randomMaterial = new Material(Shader.Find("Standard"));
+        //randomMaterial.color = baseColor;
+        //tiles[index].tileGO.GetComponent<Renderer>().material = randomMaterial;
 
 
         // Recorrer Lista de Vector3 Position -> tiles[index].Var 
+        //for(int i = 0; i< TileMapManager.tileMap.filteredList.Capacity; i++)
+        //{
+        //    (Database_PlayerPosition)TileMapManager.tileMap.filteredList[i].
+        //}
+
+        foreach (Database_PlayerPosition entity in TileMapManager.tileMap.filteredList)
+        {
+            Vector3 pos = new Vector3();
+            pos.x = entity.x;
+            pos.y = entity.y;
+            pos.z = entity.z;
+
+            int index = GetTileIndex.GetTileIndexFromPosition(pos, TileMapManager.tileMap.rows, TileMapManager.tileMap.columns, startX - (tileSize.x / 2), startZ + (tileSize.z / 2), tileSize);
+            
+            // Sumar 1 al Heat
+            TileStruct tempTile = tiles[index];
+            tempTile.heat++;
+            tiles[index] = tempTile;
+
+            //Debug.Log("Tile: " + index + "Calor: " + tiles[index].heat);
+        }
 
         // Hacer un sort para ver la Var mas grande
+
+        Debug.Log("Antes del Sort: " + tiles[0].heat + ", " + tiles[1].heat);
+
+        tiles.Sort((tile1, tile2) => tile2.heat.CompareTo(tile1.heat));
+
+        Debug.Log("Despues del Sort: " + tiles[0].heat + ", " + tiles[1].heat);
 
         // Cuando sabemos la Var mas grande = tamaño max y color max
 
         // Se normalizan las demas vars dividiendo Var/Var es tamaño max
 
-        // Cambiar las propiedades de los GO en funcion del Var normalizado
+        float maxheatCoef = 1 / tiles[0].heat;
+
+        Color tileColor = new Color(1f, 0f, 0f, 1.0f);
+
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            TileStruct tempTile = tiles[i];
+            tempTile.heat *= maxheatCoef;
+            tiles[i] = tempTile;
+
+            // Cambiar las propiedades de los GO en funcion del Var normalizado
+            if (tempTile.heat != 0)
+            {
+                tileColor.r = tempTile.heat;
+
+                Material randomMaterial = new Material(Shader.Find("Standard"));
+                randomMaterial.color = tileColor;
+                tiles[i].tileGO.GetComponent<Renderer>().material = randomMaterial;
+            }
+            else
+            {
+                tileColor.r = 0.0f;
+            }
+        }
+
+        
     }
 }

@@ -59,6 +59,10 @@ public class TileMapManager : MonoBehaviour
         tileMap.columns = columns;
         tileMap.width = mapX;
         tileMap.height = mapZ;
+        if(tileMap.filteredList == null)
+        {
+            tileMap.filteredList = new List<IDatabaseEntity>();
+        }
 
         //TODO: Delete this
         //tileMap.filteredList.AddRange(dataRecieve.dbPlayerInteractions);
