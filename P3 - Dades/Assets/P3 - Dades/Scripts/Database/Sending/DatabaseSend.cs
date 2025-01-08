@@ -155,7 +155,7 @@ public class DatabaseSend : MonoBehaviour
         EndSession();
     }
 
-    private IEnumerator SendDataToServer(string url, Dictionary<string, string> data, System.Action<string> callback = null)
+    public static IEnumerator SendDataToServer(string url, Dictionary<string, string> data, System.Action<string> callback = null)
     {
         WWWForm form = new WWWForm();
 

@@ -18,4 +18,6 @@ public struct FilterSettings
 
     public int minAge;
     public int maxAge;
+
+    public int selectedDataIndex;
 }

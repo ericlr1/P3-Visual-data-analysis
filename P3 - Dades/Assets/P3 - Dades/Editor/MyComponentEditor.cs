@@ -14,7 +14,7 @@ public class MyComponentEditor : Editor
 
         Separator();
 
-        SetTiltle("Edit HeatMap Size");
+        SetTitle("Edit HeatMap Size");
 
         DrawDefaultInspector(); // Default Inspector GUI
         
@@ -41,7 +41,25 @@ public class MyComponentEditor : Editor
 
         Separator();
 
-        SetTiltle("Filter Options");
+        SetTitle("Data Selector");
+
+        string[] dataList =
+        {
+            "player_respawns",
+            "player_positions",
+            "player_jumps",
+            "player_interactions",
+            "player_hits",
+            "player_heals",
+            "player_deaths",
+            "player_damaged"
+        };
+
+        myComponent.selectedDataIndex = EditorGUILayout.Popup(myComponent.selectedDataIndex, dataList);
+
+        Separator();
+
+        SetTitle("Filter Options");
 
         // Country Filter
         #region Country Filter
@@ -131,7 +149,7 @@ public class MyComponentEditor : Editor
     {
         GUI.color = color;
     }
-    private void SetTiltle(string name)
+    private void SetTitle(string name)
     {
         EditorGUILayout.LabelField(name, EditorStyles.boldLabel);
     }

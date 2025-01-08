@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Unity.VisualScripting;
@@ -34,7 +35,29 @@ public class EditHeatMap : MonoBehaviour
     // Database Object
     [SerializeField] private DatabaseReceive dataRecieve;
 
-    [SerializeField] private GameObject tempCube;
+    [HideInInspector]
+    private Dictionary<int, List<IDatabaseEntity>> _dataDictionary;
+    public Dictionary<int, List<IDatabaseEntity>> DataDictionary
+    {
+        get
+        {
+            if (_dataDictionary == null)
+            {
+                _dataDictionary = new Dictionary<int, List<IDatabaseEntity>>
+            {
+                { 0, dataRecieve.dbPlayerRespawns.Cast<IDatabaseEntity>().ToList() },
+                { 1, dataRecieve.dbPlayerPositions.Cast<IDatabaseEntity>().ToList() },
+                { 2, dataRecieve.dbPlayerJumps.Cast<IDatabaseEntity>().ToList() },
+                { 3, dataRecieve.dbPlayerInteractions.Cast<IDatabaseEntity>().ToList() },
+                { 4, dataRecieve.dbPlayerHits.Cast<IDatabaseEntity>().ToList() },
+                { 5, dataRecieve.dbPlayerHeals.Cast<IDatabaseEntity>().ToList() },
+                { 6, dataRecieve.dbPlayerDeaths.Cast<IDatabaseEntity>().ToList() },
+                { 7, dataRecieve.dbPlayerDamages.Cast<IDatabaseEntity>().ToList() }
+            };
+            }
+            return _dataDictionary;
+        }
+    }
 
     public void GenerateTiles()
     {
@@ -119,35 +142,72 @@ public class EditHeatMap : MonoBehaviour
         //Vaciamos la lista al inicio
         TileMapManager.tileMap.filteredList.Clear();
 
+        //Provisional string, de momento solo sirve para la view "users_sessions_positions"
+        string filtersQuery = string.Empty;
+
         if ((filterSettings.activeFilters & FilterType.Country) != 0)
         {
+            string countryName = UserAttributes.GetCountryArray()[filterSettings.selectedCountryIndex];
             
+
+            if (filtersQuery == string.Empty)
+            {
+                filtersQuery += "WHERE ";
+            }
+
+            filtersQuery += ("country = " + countryName);
         }
 
         if ((filterSettings.activeFilters & FilterType.Gender) != 0)
         {
-            
+            string gender = UserAttributes.GetGenderArray()[filterSettings.selectedGenderIndex];
+
+
+            if (filtersQuery == string.Empty)
+            {
+                filtersQuery += "WHERE ";
+            }
+
+            filtersQuery += ("gender = " + gender);
         }
 
         if ((filterSettings.activeFilters & FilterType.Age) != 0)
         {
-            
+            if (filtersQuery == string.Empty)
+            {
+                filtersQuery += "WHERE ";
+            }
+
+            filtersQuery += ("age BETWEEN " + filterSettings.minAge + " AND " + filterSettings.maxAge);
         }
 
         //TODO: Hacer la consulta a SQL según los filtros
+        string sql_query = "SELECT sessionID, x, y, z, time FROM users_sessions_positions " + filtersQuery;
 
+        string sendPositionURL = "https://citmalumnes.upc.es/~mariogs5/" + "Generic Retrieve Data.php";
 
+        // Prepare data to send
+        Dictionary<string, string> data = new Dictionary<string, string>
+        {
+            { "sql", sql_query }
+        };
 
-        //Debug.Log(TileMapManager.tileMap.filteredList[0]);
+        // Start the coroutine to send the data (TODO: Cambiar esto)
+        StartCoroutine(DatabaseSend.SendDataToServer(sendPositionURL, data));
+
+        Debug.Log("sql query: " + sql_query);
     }
 
     public void TestTilePos()
     {
         // Agregar datos (Provisional)
-        TileMapManager.tileMap.filteredList.AddRange(dataRecieve.dbPlayerPositions);
+        TileMapManager.tileMap.filteredList.Clear();
+
+        TileMapManager.tileMap.filteredList.AddRange(DataDictionary[TileMapManager.filterSettings.selectedDataIndex]);
+        //TileMapManager.tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
 
         // Recibir datos (Provisional)
-        foreach (Database_PlayerPosition entity in TileMapManager.tileMap.filteredList)
+        foreach (IDatabaseEntity entity in TileMapManager.tileMap.filteredList)
         {
             Vector3 pos = new Vector3();
             pos.x = entity.x;

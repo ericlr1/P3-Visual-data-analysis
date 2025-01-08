@@ -21,6 +21,8 @@ public class TileMapManager : MonoBehaviour
     [HideInInspector] public bool applyAgeFilter;
     [HideInInspector] public int minAge = 0;
     [HideInInspector] public int maxAge = 100;
+
+    [HideInInspector] public int selectedDataIndex;
     #endregion
 
     //Filter Settings object
@@ -112,6 +114,10 @@ public class TileMapManager : MonoBehaviour
             filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Age;
         }
         #endregion
+
+        //Linkear selectedDataIndex del struct
+        filterSettings.selectedDataIndex = selectedDataIndex;
+
 
         heatMap.ApplyFilters(filterSettings);
 
