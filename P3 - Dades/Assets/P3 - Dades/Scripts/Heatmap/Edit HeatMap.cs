@@ -59,6 +59,30 @@ public class EditHeatMap : MonoBehaviour
         }
     }
 
+    //private Dictionary<int, IDatabaseEntity> _dataDictionary1;
+    //public Dictionary<int, IDatabaseEntity> DataDictionary1
+    //{
+    //    get
+    //    {
+    //        if (_dataDictionary1 == null)
+    //        {
+    //            _dataDictionary1 = new Dictionary<int, IDatabaseEntity>
+    //        {
+    //            { 0, (IDatabaseEntity)dataRecieve.dbPlayerRespawns },
+    //            { 1, (IDatabaseEntity) dataRecieve.dbPlayerPositions },
+    //            { 2, (IDatabaseEntity) dataRecieve.dbPlayerJumps },
+    //            { 3, (IDatabaseEntity) dataRecieve.dbPlayerInteractions },
+    //            { 4, (IDatabaseEntity) dataRecieve.dbPlayerHits },
+    //            { 5, (IDatabaseEntity) dataRecieve.dbPlayerHeals },
+    //            { 6, (IDatabaseEntity) dataRecieve.dbPlayerDeaths },
+    //            { 7, (IDatabaseEntity) dataRecieve.dbPlayerDamages }
+    //        };
+    //        }
+    //        return _dataDictionary1;
+    //    }
+    //}
+
+
     public void InitTool()
     {
         //Recive data
@@ -160,8 +184,12 @@ public class EditHeatMap : MonoBehaviour
             {
                 filtersQuery += "WHERE ";
             }
+            else
+            {
+                filtersQuery += " AND ";
+            }
 
-            filtersQuery += ("country = " + countryName);
+            filtersQuery += $"country = '{countryName}'";
         }
 
         if ((filterSettings.activeFilters & FilterType.Gender) != 0)
@@ -173,8 +201,12 @@ public class EditHeatMap : MonoBehaviour
             {
                 filtersQuery += "WHERE ";
             }
+            else
+            {
+                filtersQuery += " AND ";
+            }
 
-            filtersQuery += ("gender = " + gender);
+            filtersQuery += $"gender = '{gender}'";
         }
 
         if ((filterSettings.activeFilters & FilterType.Age) != 0)
@@ -183,12 +215,22 @@ public class EditHeatMap : MonoBehaviour
             {
                 filtersQuery += "WHERE ";
             }
+            else
+            {
+                filtersQuery += " AND ";
+            }
 
-            filtersQuery += ("age BETWEEN " + filterSettings.minAge + " AND " + filterSettings.maxAge);
+            filtersQuery += $"age BETWEEN {filterSettings.minAge} AND {filterSettings.maxAge}";
         }
 
-        //TODO: Hacer la consulta a SQL según los filtros
-        string sql_query = "SELECT sessionID, x, y, z, time FROM users_sessions_positions " + filtersQuery;
+        // Si no hay filtros, la consulta será sin la cláusula WHERE
+        if (filtersQuery == string.Empty)
+        {
+            filtersQuery = "WHERE 1"; // Esto asegura que siempre se haga el SELECT, incluso sin filtros
+        }
+
+        //Contruir la consulta de SQL básica
+        string sql_query = "SELECT * FROM users_sessions_positions " + filtersQuery;
 
         string sendPositionURL = "https://citmalumnes.upc.es/~mariogs5/" + "Generic Retrieve Data.php";
 
@@ -199,21 +241,20 @@ public class EditHeatMap : MonoBehaviour
         };
 
         // Start the coroutine to send the data (TODO: Cambiar esto)
-        StartCoroutine(DatabaseSend.SendDataToServer(sendPositionURL, data));
+        //StartCoroutine(dataRecieve.FetchFilteredDataFromServer<>(sendPositionURL, data));
+        StartCoroutine(dataRecieve.FetchFilteredDataFromServer<Database_PlayerPosition>(sendPositionURL, data));
 
         //Change the color and scale to the tiles
         DrawFilteredTiles();
-
-        //Debug.Log("sql query: " + sql_query);
     }
 
     public void DrawFilteredTiles()
     {
-        // Agregar datos (Provisional)
+        // Limpiar datos anteriores
         TileMapManager.tileMap.filteredList.Clear();
 
+        //Añadir datos nuevos a la lista
         TileMapManager.tileMap.filteredList.AddRange(DataDictionary[TileMapManager.filterSettings.selectedDataIndex]);
-        //TileMapManager.tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
 
         // Recibir datos (Provisional)
         foreach (IDatabaseEntity entity in TileMapManager.tileMap.filteredList)
