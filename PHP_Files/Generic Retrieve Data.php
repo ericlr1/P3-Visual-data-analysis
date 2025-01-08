@@ -3,26 +3,7 @@
 include 'DatabaseConnect.php';
 
 // Inicializar la consulta SQL base
-$sql = "SELECT userID, name, country, age, gender, dateOfCreation FROM users WHERE 1=1";
-
-// Recorrer los filtros enviados por POST
-foreach ($_POST as $key => $value) {
-    if (!empty($value)) {
-        // Escapar las cadenas y agregar condiciones según el filtro
-        switch ($key) {
-            case 'country':
-                $sql .= " AND country = '" . $conn->real_escape_string($value) . "'";
-                break;
-            case 'age':
-                $sql .= " AND age = " . intval($value);
-                break;
-            case 'username':
-                $sql .= " AND name = '" . $conn->real_escape_string($value) . "'";
-                break;
-            // Agrega más filtros según sea necesario
-        }
-    }
-}
+$sql = $_POST['sql'];
 
 $result = $conn->query($sql);
 
