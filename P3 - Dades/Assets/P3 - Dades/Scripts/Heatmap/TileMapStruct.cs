@@ -13,6 +13,8 @@ public struct TileMap
     public int width;   // Width of the Map that want to be covered
     public int height;  // Height of the Map that want to be covered
 
+    public Color myColor;
+
     public List<IDatabaseEntity> filteredList;
 }
 

@@ -10,7 +10,9 @@ public class MyComponentEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        var defaultColor = GUI.color;
+        Separator(5);
+
+        SetLargeTitle("HEATMAP TOOL");
 
         Separator();
 
@@ -22,22 +24,9 @@ public class MyComponentEditor : Editor
 
         Separator(5);
 
-        ChangeUIColor(Colors.MintGreen);
-
-        // Generate Tiles
-        if (GUILayout.Button("Generate Tiles"))
-        {
-            myComponent.GenerateTiles();
-        }
-
-        ChangeUIColor(Colors.Crimson);
-        // Delete Tiles
-        if (GUILayout.Button("Delete Tiles"))
-        {
-            myComponent.DeleteTiles();
-        }
-
-        ChangeUIColor(defaultColor);
+        // Rueda de color para cambiar el color
+        SetTitle("Select Color");
+        myComponent.myColor = EditorGUILayout.ColorField("HeatMap Color", myComponent.myColor);  // Color Picker
 
         Separator();
 
@@ -127,19 +116,18 @@ public class MyComponentEditor : Editor
 
         Separator(5);
 
-        // Apply filters button
-        if (GUILayout.Button("Apply Filters"))
+        ChangeUIColor(Colors.MintGreen);
+
+        if (GUILayout.Button("Generate Tiles"))
         {
-            myComponent.ApplyFilters();
+            myComponent.ExecuteHeatMapTool();
         }
 
-        Separator();
-
-        ChangeUIColor(Colors.Amber);
-
-        if (GUILayout.Button("Test Get Index Tile"))
+        ChangeUIColor(Colors.Crimson);
+        // Delete Tiles
+        if (GUILayout.Button("Delete Tiles"))
         {
-            myComponent.TestIndex();
+            myComponent.DeleteTiles();
         }
 
     }
@@ -159,6 +147,14 @@ public class MyComponentEditor : Editor
         GUILayout.Space(space);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Space(space);
+    }
+
+    private void SetLargeTitle(string name, int size = 24)
+    {
+        var style = new GUIStyle(EditorStyles.boldLabel);
+        style.fontSize = size;  // Cambiar el tamaño de la fuente
+        style.alignment = TextAnchor.MiddleCenter; // Centrar el texto
+        EditorGUILayout.LabelField(name, style);
     }
     #endregion
 }

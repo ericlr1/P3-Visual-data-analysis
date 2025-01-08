@@ -42,6 +42,23 @@ public class DatabaseReceive : MonoBehaviour
         StartCoroutine(FetchAllDatabaseData());
     }
 
+    public IEnumerator ReceiveDataButtonCorrutine()
+    {
+        dbUsers = new List<Database_User>();
+        dbSessions = new List<Database_Session>();
+        dbPlayerRespawns = new List<Database_PlayerRespawn>();
+        dbPlayerPositions = new List<Database_PlayerPosition>();
+        dbPlayerJumps = new List<Database_PlayerJump>();
+        dbPlayerInteractions = new List<Database_PlayerInteraction>();
+        dbPlayerHits = new List<Database_PlayerHit>();
+        dbPlayerHeals = new List<Database_PlayerHeal>();
+        dbPlayerDeaths = new List<Database_PlayerDeath>();
+        dbPlayerDamages = new List<Database_PlayerDamaged>();
+
+        yield return StartCoroutine(FetchAllDatabaseData());
+    }
+
+
     private IEnumerator FetchAllDatabaseData()
     {
         // A list of all fetch operations

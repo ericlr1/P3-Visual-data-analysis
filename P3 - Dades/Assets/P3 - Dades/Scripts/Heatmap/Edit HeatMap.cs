@@ -59,15 +59,21 @@ public class EditHeatMap : MonoBehaviour
         }
     }
 
-    public void GenerateTiles()
+    public void InitTool()
     {
+        //Recive data
+        dataRecieve.ReceiveDataButtonCorrutine();
+
         tiles = new List<TileStruct>();
 
         if (parent == null)
         {
             parent = TileMapManager.tileMap.parent;
         }
+    }
 
+    public void GenerateTiles()
+    {
         DeleteTiles();
         CalculateTileSize();
 
@@ -195,10 +201,13 @@ public class EditHeatMap : MonoBehaviour
         // Start the coroutine to send the data (TODO: Cambiar esto)
         StartCoroutine(DatabaseSend.SendDataToServer(sendPositionURL, data));
 
-        Debug.Log("sql query: " + sql_query);
+        //Change the color and scale to the tiles
+        DrawFilteredTiles();
+
+        //Debug.Log("sql query: " + sql_query);
     }
 
-    public void TestTilePos()
+    public void DrawFilteredTiles()
     {
         // Agregar datos (Provisional)
         TileMapManager.tileMap.filteredList.Clear();
@@ -239,7 +248,7 @@ public class EditHeatMap : MonoBehaviour
             tempTile.heat *= maxheatCoef;
             tiles[i] = tempTile;
 
-            Color tileColor = Color.Lerp(Color.white, Color.red, tempTile.heat);
+            Color tileColor = Color.Lerp(Color.white, TileMapManager.tileMap.myColor, tempTile.heat);
 
             Material randomMaterial = new Material(Shader.Find("Standard"));
             randomMaterial.color = tileColor;

@@ -8,6 +8,9 @@ using static UnityEditor.PlayerSettings;
 
 public class TileMapManager : MonoBehaviour
 {
+    [HideInInspector] public Color myColor = Color.white;  // Propiedad pública de tipo Color
+
+
     #region Filter Options
     // Country Filter Vars
     [HideInInspector] public bool applyCountryFilter;
@@ -33,6 +36,10 @@ public class TileMapManager : MonoBehaviour
 
     [SerializeField] private GameObject tilePrefab;
 
+    [Space(1.5f)]
+
+    [Header("Tile Settings")]
+
     // Grid Vars
     [SerializeField, Range(1, 100)] int rows;
     [SerializeField, Range(1, 100)] int columns;
@@ -44,11 +51,8 @@ public class TileMapManager : MonoBehaviour
     private GameObject parent;
     private EditHeatMap heatMap;
 
-    bool tilesCreated = false;
-
-    public void GenerateTiles()
+    public void InitTool()
     {
-        
         if (parent == null)
         {
             parent = GameObject.Find("Tiles Parent");
@@ -61,38 +65,25 @@ public class TileMapManager : MonoBehaviour
         tileMap.columns = columns;
         tileMap.width = mapX;
         tileMap.height = mapZ;
-        if(tileMap.filteredList == null)
-        {
-            tileMap.filteredList = new List<IDatabaseEntity>();
-        }
-
-        //TODO: Delete this
-        //tileMap.filteredList.AddRange(dataRecieve.dbPlayerInteractions);
-        //tileMap.filteredList.AddRange(dataRecieve.dbUsers);
-        //tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
-
-        heatMap.GenerateTiles();
-        tilesCreated = true;
-    }
-    public void DeleteTiles()
-    {
-        heatMap.DeleteTiles();
-        tilesCreated = false;
-    }
-
-    public void ApplyFilters()
-    {
-        //Si nunca se han generado als tiles hacerlo con los valores por defecto
-        if (!tilesCreated)
-        {
-            GenerateTiles();
-        }
-
+        tileMap.myColor = myColor;
         if (tileMap.filteredList == null)
         {
             tileMap.filteredList = new List<IDatabaseEntity>();
         }
-        
+
+        heatMap.InitTool();
+    }
+    public void GenerateTiles()
+    {
+        heatMap.GenerateTiles();
+    }
+    public void DeleteTiles()
+    {
+        heatMap.DeleteTiles();
+    }
+
+    public void ApplyFilters()
+    {        
         //Check if any filter is being used
         #region Filters
         if (applyCountryFilter)
@@ -126,8 +117,10 @@ public class TileMapManager : MonoBehaviour
 
     }
 
-    public void TestIndex()
+    public void ExecuteHeatMapTool()
     {
-        heatMap.TestTilePos();
+        InitTool();
+        GenerateTiles();
+        ApplyFilters();
     }
 }
