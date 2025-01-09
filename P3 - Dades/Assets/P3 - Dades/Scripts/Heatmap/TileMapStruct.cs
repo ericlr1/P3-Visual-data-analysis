@@ -18,6 +18,8 @@ public struct TileMap
 
 
     public List<IDatabaseEntity> filteredList;
+
+    public int filteredTileScale;
 }
 
 public struct TileStruct

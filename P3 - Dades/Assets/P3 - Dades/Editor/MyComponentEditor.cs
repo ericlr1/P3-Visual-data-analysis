@@ -49,9 +49,9 @@ public class MyComponentEditor : Editor
         Separator(5);
         #endregion
 
-        // ------------------- Select Color ------------------- \\
+        // ------------------- Select Settings ------------------- \\
         #region Select Color
-        SetTitle("Select HeatMap Color");
+        SetTitle("Select HeatMap Settings");
 
         GUILayout.Space(5);
 
@@ -60,7 +60,11 @@ public class MyComponentEditor : Editor
         GUILayout.Space(5);
 
         myComponent.myColor = EditorGUILayout.ColorField("Tile Color", myComponent.myColor);
-       
+
+        GUILayout.Space(5);
+
+        myComponent.filteredTileScale = Mathf.RoundToInt(EditorGUILayout.Slider("HeatMap Tile Scale", myComponent.filteredTileScale, 2, 30));
+        
         Separator();
         #endregion
 

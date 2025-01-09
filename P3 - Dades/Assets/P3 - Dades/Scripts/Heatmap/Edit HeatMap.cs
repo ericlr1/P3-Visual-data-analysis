@@ -232,7 +232,7 @@ public class EditHeatMap : MonoBehaviour
 
             if (tempTile.heat != 0)
             {
-                tileScale.y += (10 * tempTile.heat);
+                tileScale.y += (TileMapManager.tileMap.filteredTileScale * tempTile.heat);
 
                 tiles[i].tileGO.transform.localScale = tileScale;
             }

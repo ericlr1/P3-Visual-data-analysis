@@ -8,6 +8,8 @@ public class TileMapManager : MonoBehaviour
     [HideInInspector] public Color myColor = Color.white;
     [HideInInspector] public Color myBaseColor = Color.white;
 
+    [HideInInspector] public int filteredTileScale = 10;
+
     #region Filter Options
     // Country filter variables
     [HideInInspector] public bool applyCountryFilter;
@@ -67,6 +69,7 @@ public class TileMapManager : MonoBehaviour
         tileMap.height = mapZ;
         tileMap.myColor = myColor;
         tileMap.myBaseColor = myBaseColor;
+        tileMap.filteredTileScale = filteredTileScale;
 
         if (tileMap.filteredList == null)
         {
