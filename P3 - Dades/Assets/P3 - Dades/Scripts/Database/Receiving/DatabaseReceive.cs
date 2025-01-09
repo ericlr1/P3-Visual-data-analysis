@@ -21,6 +21,17 @@ public class DatabaseReceive : MonoBehaviour
     public List<Database_PlayerDeath> dbPlayerDeaths;
     public List<Database_PlayerDamaged> dbPlayerDamages;
 
+    [Space(20)]
+
+    public List<Database_PlayerRespawn_View> dbPlayerRespawnsView;
+    public List<Database_PlayerPosition_View> dbPlayerPositionsView;
+    public List<Database_PlayerJump_View> dbPlayerJumpsView;
+    public List<Database_PlayerInteraction_View> dbPlayerInteractionsView;
+    public List<Database_PlayerHit_View> dbPlayerHitsView;
+    public List<Database_PlayerHeal_View> dbPlayerHealsView;
+    public List<Database_PlayerDeath_View> dbPlayerDeathsView;
+    public List<Database_PlayerDamaged_View> dbPlayerDamagesView;
+
     public void Awake()
     {
         ReceiveDataButton();
@@ -39,6 +50,15 @@ public class DatabaseReceive : MonoBehaviour
         dbPlayerDeaths = new List<Database_PlayerDeath>();
         dbPlayerDamages = new List<Database_PlayerDamaged>();
 
+        dbPlayerRespawnsView = new List<Database_PlayerRespawn_View>();
+        dbPlayerPositionsView = new List<Database_PlayerPosition_View>();
+        dbPlayerJumpsView = new List<Database_PlayerJump_View>();
+        dbPlayerInteractionsView = new List<Database_PlayerInteraction_View>();
+        dbPlayerHitsView = new List<Database_PlayerHit_View>();
+        dbPlayerHealsView = new List<Database_PlayerHeal_View>();
+        dbPlayerDeathsView = new List<Database_PlayerDeath_View>();
+        dbPlayerDamagesView = new List<Database_PlayerDamaged_View>();
+
         StartCoroutine(FetchAllDatabaseData());
     }
 
@@ -55,6 +75,15 @@ public class DatabaseReceive : MonoBehaviour
         dbPlayerDeaths = new List<Database_PlayerDeath>();
         dbPlayerDamages = new List<Database_PlayerDamaged>();
 
+        dbPlayerRespawnsView = new List<Database_PlayerRespawn_View>();
+        dbPlayerPositionsView = new List<Database_PlayerPosition_View>();
+        dbPlayerJumpsView = new List<Database_PlayerJump_View>();
+        dbPlayerInteractionsView = new List<Database_PlayerInteraction_View>();
+        dbPlayerHitsView = new List<Database_PlayerHit_View>();
+        dbPlayerHealsView = new List<Database_PlayerHeal_View>();
+        dbPlayerDeathsView = new List<Database_PlayerDeath_View>();
+        dbPlayerDamagesView = new List<Database_PlayerDamaged_View>();
+
         yield return StartCoroutine(FetchAllDatabaseData());
     }
 
@@ -64,6 +93,7 @@ public class DatabaseReceive : MonoBehaviour
         // A list of all fetch operations
         List<IEnumerator> fetchOperations = new List<IEnumerator>
         {
+            // Tables
             FetchDatabaseData(serverURL + "RetrieveUsers.php", dbUsers),
             FetchDatabaseData(serverURL + "RetrieveSessions.php", dbSessions),
             FetchDatabaseData(serverURL + "RetrievePlayerRespawns.php", dbPlayerRespawns),
@@ -73,7 +103,17 @@ public class DatabaseReceive : MonoBehaviour
             FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits),
             FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals),
             FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths),
-            FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages)
+            FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages),
+            
+            // Views
+            FetchDatabaseData(serverURL + "RetrievePlayerRespawns_View.php", dbPlayerRespawnsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerPositions_View.php", dbPlayerPositionsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerJumps_View.php", dbPlayerJumpsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerInteractions_View.php", dbPlayerInteractionsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerHits_View.php", dbPlayerHitsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerHeals_View.php", dbPlayerHealsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerDeaths_View.php", dbPlayerDeathsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerDamages_View.php", dbPlayerDamagesView)
         };
 
         // Start all fetch operations and wait for them to complete

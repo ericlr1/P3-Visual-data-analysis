@@ -140,3 +140,143 @@ public struct Database_PlayerDamaged : IDatabaseEntity
     public float damager_z;
     public int amount;
 }
+
+// ------------------------------------------------------------------------------------------------------- //
+// VIEWS 
+
+[System.Serializable]
+public struct Database_PlayerRespawn_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_respawns";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+}
+
+[System.Serializable]
+public struct Database_PlayerPosition_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_positions";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+}
+
+[System.Serializable]
+public struct Database_PlayerJump_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_jumps";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+}
+
+[System.Serializable]
+public struct Database_PlayerInteraction_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_interactions";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+    public string interactable;
+}
+
+[System.Serializable]
+public struct Database_PlayerHit_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_hits";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+    public string target;
+    public int amount;
+}
+
+[System.Serializable]
+public struct Database_PlayerHeal_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_heals";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+}
+
+[System.Serializable]
+public struct Database_PlayerDeath_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_deaths";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+}
+
+[System.Serializable]
+public struct Database_PlayerDamaged_View : IDatabaseEntity
+{
+    public static string responseKey => "users_sessions_damaged";
+
+    public string country;
+    public int age;
+    public string gender;
+
+    public int sessionID;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float time;
+
+    public string damager;
+    public float damager_x;
+    public float damager_y;
+    public float damager_z;
+    public int amount;
+}
