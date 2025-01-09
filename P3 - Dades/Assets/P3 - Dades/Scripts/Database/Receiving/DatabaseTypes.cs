@@ -1,7 +1,6 @@
 public interface IDatabaseEntity
 {
     // Marker interface for database types
-    public static string responseKey;
     float x { get; set; }
     float y { get; set; }
     float z { get; set; }

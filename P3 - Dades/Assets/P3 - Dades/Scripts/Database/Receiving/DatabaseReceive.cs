@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.IO;
-using Unity.VisualScripting;
-using System.Linq;
 
 public class DatabaseReceive : MonoBehaviour
 {
@@ -175,61 +173,4 @@ public class DatabaseReceive : MonoBehaviour
             Debug.LogError($"Failed to write database data to file: {e.Message}");
         }
     }
-
-    public IEnumerator FetchFilteredDataFromServer<T>(string url, Dictionary<string, string> data) where T : IDatabaseEntity
-    {
-        using (UnityWebRequest request = UnityWebRequest.Post(url, data))
-        {
-            // Esperamos la respuesta del servidor
-            yield return request.SendWebRequest();
-
-            // Comprobamos si la solicitud fue exitosa
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                string jsonResponse = request.downloadHandler.text;
-                Debug.Log("Response: " + jsonResponse);
-                
-                // Usamos reflexión para obtener el "responseKey" de la clase T
-                var responseKey = typeof(T).GetProperty("responseKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)?.GetValue(null) as string;
-                //string responseKey = GetResponseKeyForType(dataTypeIndex);
-
-                if (responseKey != null)
-                {
-                    // Deserializamos la respuesta JSON en la lista adecuada según el tipo T
-                    GenericResponse<T> response = JsonConvert.DeserializeObject<GenericResponse<T>>(jsonResponse);
-
-                    if (response.success)
-                    {
-                        // Verificamos si los datos existen
-                        var dataList = response.GetData(responseKey);
-                        if (dataList != null && dataList.Length > 0)
-                        {
-                            // Añadimos los datos a la lista filtrada
-                            TileMapManager.tileMap.filteredList.AddRange(dataList);
-                            Debug.Log($"Successfully retrieved {dataList.Length} items of type {typeof(T).Name}.");
-                        }
-                        else
-                        {
-                            // Si no hay datos, retornamos una lista vacía y mostramos un mensaje
-                            TileMapManager.tileMap.filteredList.Clear();
-                            Debug.LogWarning($"No items of type {typeof(T).Name} found. Returning an empty list.");
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError($"Error retrieving data: {response.error}");
-                    }
-                }
-                else
-                {
-                    Debug.Log($"ResponseKey not found for type {typeof(T).Name}");
-                }
-            }
-            else
-            {
-                Debug.LogError("Error retrieving data: " + request.error);
-            }
-        }
-    }
-
 }
