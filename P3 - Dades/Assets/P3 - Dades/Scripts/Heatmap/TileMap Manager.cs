@@ -38,7 +38,8 @@ public class TileMapManager : MonoBehaviour
     [SerializeField] private GameObject tilePrefab;
 
     // Tile settings
-    [Header("Tile Settings")]
+    [Header("Edit HeatMap Size")]
+    [Space(5)]
     [SerializeField, Range(1, 100)] int rows; // Number of rows
     [SerializeField, Range(1, 100)] int columns; // Number of columns
     [SerializeField, Range(1, 1000)] int mapX; // Map width

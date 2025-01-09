@@ -29,7 +29,7 @@ public class MyComponentEditor : Editor
 
         SetLargeTitle("HEATMAP TOOL");
 
-        Separator();
+        Separator(5);
         #endregion
 
         DrawClickableLink("Visit GitHub Repository", "https://github.com/ericlr1/P3-Visual-data-analysis");
@@ -38,7 +38,6 @@ public class MyComponentEditor : Editor
 
         // ------------------- Edit HeatMap ------------------- \\
         #region Edit HeatMap
-        SetTitle("Edit HeatMap Size");
 
         GUILayout.Space(5);
 

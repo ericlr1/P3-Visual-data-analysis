@@ -671,6 +671,18 @@
       "country": null,
       "age": 0,
       "gender": null
+    },
+    {
+      "sessionID": 33,
+      "userID": 16,
+      "startTime": "2025-01-09 21:44:12",
+      "endTime": "2025-01-09 21:44:16",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "country": null,
+      "age": 0,
+      "gender": null
     }
   ],
   "PlayerRespawns": [
@@ -1787,6 +1799,16 @@
     {
       "sessionID": 32,
       "time": 1.779,
+      "x": 6.0,
+      "y": -0.021,
+      "z": -35.0,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 1.778,
       "x": 6.0,
       "y": -0.021,
       "z": -35.0,
@@ -53495,6 +53517,106 @@
       "country": null,
       "age": 0,
       "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 0.04,
+      "x": 6.0,
+      "y": -0.021,
+      "z": -35.0,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 0.599,
+      "x": 6.0,
+      "y": -0.021,
+      "z": -35.0,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 1.102,
+      "x": 6.0,
+      "y": -0.021,
+      "z": -35.0,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 1.605,
+      "x": 6.0,
+      "y": -0.021,
+      "z": -35.0,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 2.105,
+      "x": 5.814,
+      "y": -0.021,
+      "z": -33.754,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 2.607,
+      "x": 3.676,
+      "y": -0.023,
+      "z": -35.023,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 3.11,
+      "x": 4.455,
+      "y": 1.871,
+      "z": -33.662,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 3.613,
+      "x": 1.376,
+      "y": 0.647,
+      "z": -34.903,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 4.114,
+      "x": 2.422,
+      "y": 2.068,
+      "z": -37.578,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 4.615,
+      "x": 3.016,
+      "y": -0.023,
+      "z": -35.427,
+      "country": null,
+      "age": 0,
+      "gender": null
     }
   ],
   "PlayerJumps": [
@@ -59854,6 +59976,26 @@
       "x": 62.553,
       "y": -0.017,
       "z": -15.521,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 2.858,
+      "x": 5.286,
+      "y": -0.021,
+      "z": -35.189,
+      "country": null,
+      "age": 0,
+      "gender": null
+    },
+    {
+      "sessionID": 33,
+      "time": 3.779,
+      "x": 1.285,
+      "y": -0.024,
+      "z": -35.664,
       "country": null,
       "age": 0,
       "gender": null

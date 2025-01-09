@@ -204,10 +204,13 @@ public class EditHeatMap : MonoBehaviour
 
             int index = GetTileIndex.GetTileIndexFromPosition(pos, TileMapManager.tileMap.rows, TileMapManager.tileMap.columns, startX - (tileSize.x / 2), startZ + (tileSize.z / 2), tileSize);
             
-            // Increment Heat
-            TileStruct tempTile = tiles[index];
-            tempTile.heat++;
-            tiles[index] = tempTile;
+            if(index != -1)
+            {
+                // Increment Heat
+                TileStruct tempTile = tiles[index];
+                tempTile.heat++;
+                tiles[index] = tempTile;
+            }
         }
 
         // Sort by Heat
