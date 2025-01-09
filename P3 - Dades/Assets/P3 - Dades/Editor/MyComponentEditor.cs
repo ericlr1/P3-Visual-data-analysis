@@ -32,6 +32,10 @@ public class MyComponentEditor : Editor
         Separator();
         #endregion
 
+        DrawClickableLink("Visit GitHub Repository", "https://github.com/ericlr1/P3-Visual-data-analysis");
+
+        GUILayout.Space(5);
+
         // ------------------- Edit HeatMap ------------------- \\
         #region Edit HeatMap
         SetTitle("Edit HeatMap Size");
@@ -187,6 +191,22 @@ public class MyComponentEditor : Editor
         style.fontSize = size;  // Cambiar el tamaño de la fuente
         style.alignment = TextAnchor.MiddleCenter; // Centrar el texto
         EditorGUILayout.LabelField(name, style);
+    }
+
+    private void DrawClickableLink(string label, string url)
+    {
+        var style = new GUIStyle(EditorStyles.label)
+        {
+            normal = { textColor = Colors.RoyalBlue },
+            hover = { textColor = Colors.SteelBlue },
+            fontStyle = FontStyle.Bold,
+            alignment = TextAnchor.MiddleCenter
+        };
+
+        if (GUILayout.Button(label, style))
+        {
+            Application.OpenURL(url);
+        }
     }
     #endregion
 }
