@@ -23,14 +23,14 @@ public class DatabaseReceive : MonoBehaviour
 
     [Space(20)]
 
-    public List<Database_PlayerRespawn_View> dbPlayerRespawnsView;
-    public List<Database_PlayerPosition_View> dbPlayerPositionsView;
-    public List<Database_PlayerJump_View> dbPlayerJumpsView;
-    public List<Database_PlayerInteraction_View> dbPlayerInteractionsView;
-    public List<Database_PlayerHit_View> dbPlayerHitsView;
-    public List<Database_PlayerHeal_View> dbPlayerHealsView;
-    public List<Database_PlayerDeath_View> dbPlayerDeathsView;
-    public List<Database_PlayerDamaged_View> dbPlayerDamagesView;
+    [HideInInspector] public List<Database_PlayerRespawn_View> dbPlayerRespawnsView;
+    [HideInInspector] public List<Database_PlayerPosition_View> dbPlayerPositionsView;
+    [HideInInspector] public List<Database_PlayerJump_View> dbPlayerJumpsView;
+    [HideInInspector] public List<Database_PlayerInteraction_View> dbPlayerInteractionsView;
+    [HideInInspector] public List<Database_PlayerHit_View> dbPlayerHitsView;
+    [HideInInspector] public List<Database_PlayerHeal_View> dbPlayerHealsView;
+    [HideInInspector] public List<Database_PlayerDeath_View> dbPlayerDeathsView;
+    [HideInInspector] public List<Database_PlayerDamaged_View> dbPlayerDamagesView;
 
     public void Awake()
     {
