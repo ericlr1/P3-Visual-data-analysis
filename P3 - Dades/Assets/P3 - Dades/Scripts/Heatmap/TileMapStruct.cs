@@ -14,6 +14,8 @@ public struct TileMap
     public int height;  // Height of the Map that want to be covered
 
     public Color myColor;
+    public Color myBaseColor;
+
 
     public List<IDatabaseEntity> filteredList;
 }

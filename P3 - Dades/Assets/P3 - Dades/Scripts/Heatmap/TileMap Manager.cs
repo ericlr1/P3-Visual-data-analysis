@@ -10,6 +10,7 @@ public class TileMapManager : MonoBehaviour
 {
     [HideInInspector] public Color myColor = Color.white;  // Propiedad pública de tipo Color
 
+    [HideInInspector] public Color myBaseColor = Color.white;  // Propiedad pública de tipo Color
 
     #region Filter Options
     // Country Filter Vars
@@ -66,6 +67,7 @@ public class TileMapManager : MonoBehaviour
         tileMap.width = mapX;
         tileMap.height = mapZ;
         tileMap.myColor = myColor;
+        tileMap.myBaseColor = myBaseColor;
         if (tileMap.filteredList == null)
         {
             tileMap.filteredList = new List<IDatabaseEntity>();

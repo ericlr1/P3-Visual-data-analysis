@@ -98,7 +98,7 @@ public class EditHeatMap : MonoBehaviour
                 // Cambiar el tamaño del tile
                 tile.tileGO.transform.localScale = new Vector3(tileSize.x / tile.tileGO.transform.localScale.x, tile.tileGO.transform.localScale.y, tileSize.z / tile.tileGO.transform.localScale.z);
 
-                Color baseColor = Color.white;
+                Color baseColor = TileMapManager.tileMap.myBaseColor;
                 Material randomMaterial = new Material(Shader.Find("Standard"));
                 randomMaterial.color = baseColor;
                 tile.tileGO.GetComponent<Renderer>().material = randomMaterial;
@@ -248,7 +248,7 @@ public class EditHeatMap : MonoBehaviour
             tempTile.heat *= maxheatCoef;
             tiles[i] = tempTile;
 
-            Color tileColor = Color.Lerp(Color.white, TileMapManager.tileMap.myColor, tempTile.heat);
+            Color tileColor = Color.Lerp(TileMapManager.tileMap.myBaseColor, TileMapManager.tileMap.myColor, tempTile.heat);
 
             Material randomMaterial = new Material(Shader.Find("Standard"));
             randomMaterial.color = tileColor;

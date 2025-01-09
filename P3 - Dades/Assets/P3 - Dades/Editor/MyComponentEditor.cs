@@ -24,9 +24,14 @@ public class MyComponentEditor : Editor
 
         Separator(5);
 
+        SetTitle("Select Color");
+        myComponent.myBaseColor = EditorGUILayout.ColorField("Background HaetMap Color", myComponent.myBaseColor);  // Color Picker
+
         // Rueda de color para cambiar el color
         SetTitle("Select Color");
         myComponent.myColor = EditorGUILayout.ColorField("HeatMap Color", myComponent.myColor);  // Color Picker
+        
+        
 
         Separator();
 
