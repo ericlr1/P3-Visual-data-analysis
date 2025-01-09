@@ -52,6 +52,9 @@ public class TileMapManager : MonoBehaviour
     private GameObject parent;
     private EditHeatMap heatMap;
 
+    // Filtered Users
+    public static int filteredUsers = 0;
+
     public void InitTool()
     {
         if (parent == null)
@@ -68,6 +71,7 @@ public class TileMapManager : MonoBehaviour
         tileMap.height = mapZ;
         tileMap.myColor = myColor;
         tileMap.myBaseColor = myBaseColor;
+
         if (tileMap.filteredList == null)
         {
             tileMap.filteredList = new List<IDatabaseEntity>();

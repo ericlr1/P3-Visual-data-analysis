@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 
 [CustomEditor(typeof(TileMapManager))]
@@ -10,33 +11,6 @@ public class MyComponentEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        Separator(5);
-
-        SetLargeTitle("HEATMAP TOOL");
-
-        Separator();
-
-        SetTitle("Edit HeatMap Size");
-
-        DrawDefaultInspector(); // Default Inspector GUI
-        
-        TileMapManager myComponent = (TileMapManager)target; // Reference to the script overrided
-
-        Separator(5);
-
-        SetTitle("Select Color");
-        myComponent.myBaseColor = EditorGUILayout.ColorField("Background HaetMap Color", myComponent.myBaseColor);  // Color Picker
-
-        // Rueda de color para cambiar el color
-        SetTitle("Select Color");
-        myComponent.myColor = EditorGUILayout.ColorField("HeatMap Color", myComponent.myColor);  // Color Picker
-        
-        
-
-        Separator();
-
-        SetTitle("Data Selector");
-
         string[] dataList =
         {
             "player_respawns",
@@ -49,11 +23,58 @@ public class MyComponentEditor : Editor
             "player_damaged"
         };
 
+        // ------------------- Tool Tilte ------------------- \\
+        #region Tool Tilte
+        Separator(5);
+
+        SetLargeTitle("HEATMAP TOOL");
+
+        Separator();
+        #endregion
+
+        // ------------------- Edit HeatMap ------------------- \\
+        #region Edit HeatMap
+        SetTitle("Edit HeatMap Size");
+
+        GUILayout.Space(5);
+
+        DrawDefaultInspector(); // Default Inspector GUI
+        
+        TileMapManager myComponent = (TileMapManager)target; // Reference to the script overrided
+
+        Separator(5);
+        #endregion
+
+        // ------------------- Select Color ------------------- \\
+        #region Select Color
+        SetTitle("Select HeatMap Color");
+
+        GUILayout.Space(5);
+
+        myComponent.myBaseColor = EditorGUILayout.ColorField("Background Color", myComponent.myBaseColor);
+
+        GUILayout.Space(5);
+
+        myComponent.myColor = EditorGUILayout.ColorField("Tile Color", myComponent.myColor);
+       
+        Separator();
+        #endregion
+
+        // ------------------- Data Selector ------------------- \\
+        #region Data Selector
+        SetTitle("Data Selector");
+
+        GUILayout.Space(5);
+
         myComponent.selectedDataIndex = EditorGUILayout.Popup(myComponent.selectedDataIndex, dataList);
 
         Separator();
+        #endregion
 
+        // ------------------- Filter Options ------------------- \\
         SetTitle("Filter Options");
+
+        GUILayout.Space(5);
 
         // Country Filter
         #region Country Filter
@@ -121,12 +142,18 @@ public class MyComponentEditor : Editor
 
         Separator(5);
 
+        SetTitle("Filtered Data Sample: " + TileMapManager.filteredUsers);
+
+        GUILayout.Space(10);
+
         ChangeUIColor(Colors.MintGreen);
 
         if (GUILayout.Button("Generate Tiles"))
         {
             myComponent.ExecuteHeatMapTool();
         }
+
+        GUILayout.Space(5);
 
         ChangeUIColor(Colors.Crimson);
         // Delete Tiles

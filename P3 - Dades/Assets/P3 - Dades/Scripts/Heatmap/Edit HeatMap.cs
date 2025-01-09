@@ -195,6 +195,8 @@ public class EditHeatMap : MonoBehaviour
             }
         }
 
+        TileMapManager.filteredUsers = TileMapManager.tileMap.filteredList.Count;
+        
         //Change the color and scale to the tiles
         DrawFilteredTiles();
 
