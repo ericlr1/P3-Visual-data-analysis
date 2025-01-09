@@ -4,6 +4,10 @@ public interface IDatabaseEntity
     float x { get; set; }
     float y { get; set; }
     float z { get; set; }
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -13,13 +17,14 @@ public struct Database_User : IDatabaseEntity
 
     public int userID;
     public string name;
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
     public string dateOfCreation;
     public float x { get; set; }
     public float y { get; set; }
     public float z { get; set; }
+
 }
 
 [System.Serializable]
@@ -34,6 +39,10 @@ public struct Database_Session : IDatabaseEntity
     public float x { get; set; }
     public float y { get; set; }
     public float z { get; set; }
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -46,6 +55,10 @@ public struct Database_PlayerRespawn : IDatabaseEntity
     public float y { get; set; }
     public float z { get; set; }
     public float time;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -58,6 +71,10 @@ public struct Database_PlayerPosition : IDatabaseEntity
     public float y { get; set; }
     public float z { get; set; }
     public float time;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -70,6 +87,10 @@ public struct Database_PlayerJump : IDatabaseEntity
     public float y { get; set; }
     public float z { get; set; }
     public float time;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -83,6 +104,10 @@ public struct Database_PlayerInteraction : IDatabaseEntity
     public float z { get; set; }
     public float time;
     public string interactable;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -97,6 +122,10 @@ public struct Database_PlayerHit : IDatabaseEntity
     public float time;
     public string target;
     public int amount;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -109,6 +138,10 @@ public struct Database_PlayerHeal : IDatabaseEntity
     public float y { get; set; }
     public float z { get; set; }
     public float time;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -121,6 +154,10 @@ public struct Database_PlayerDeath : IDatabaseEntity
     public float y { get; set; }
     public float z { get; set; }
     public float time;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 [System.Serializable]
@@ -139,6 +176,10 @@ public struct Database_PlayerDamaged : IDatabaseEntity
     public float damager_y;
     public float damager_z;
     public int amount;
+
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 }
 
 // ------------------------------------------------------------------------------------------------------- //
@@ -149,9 +190,9 @@ public struct Database_PlayerRespawn_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_respawns";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -165,9 +206,9 @@ public struct Database_PlayerPosition_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_positions";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -181,9 +222,9 @@ public struct Database_PlayerJump_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_jumps";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -197,9 +238,9 @@ public struct Database_PlayerInteraction_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_interactions";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -214,9 +255,9 @@ public struct Database_PlayerHit_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_hits";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -232,9 +273,9 @@ public struct Database_PlayerHeal_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_heals";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -248,9 +289,9 @@ public struct Database_PlayerDeath_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_deaths";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }
@@ -264,9 +305,9 @@ public struct Database_PlayerDamaged_View : IDatabaseEntity
 {
     public static string responseKey => "users_sessions_damaged";
 
-    public string country;
-    public int age;
-    public string gender;
+    public string country { get; set; }
+    public int age { get; set; }
+    public string gender { get; set; }
 
     public int sessionID;
     public float x { get; set; }

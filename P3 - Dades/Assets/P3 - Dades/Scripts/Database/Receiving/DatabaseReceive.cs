@@ -93,6 +93,16 @@ public class DatabaseReceive : MonoBehaviour
         // A list of all fetch operations
         List<IEnumerator> fetchOperations = new List<IEnumerator>
         {
+                        // Views
+            FetchDatabaseData(serverURL + "RetrievePlayerRespawns_View.php", dbPlayerRespawnsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerPositions_View.php", dbPlayerPositionsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerJumps_View.php", dbPlayerJumpsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerInteractions_View.php", dbPlayerInteractionsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerHits_View.php", dbPlayerHitsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerHeals_View.php", dbPlayerHealsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerDeaths_View.php", dbPlayerDeathsView),
+            FetchDatabaseData(serverURL + "RetrievePlayerDamages_View.php", dbPlayerDamagesView),
+
             // Tables
             FetchDatabaseData(serverURL + "RetrieveUsers.php", dbUsers),
             FetchDatabaseData(serverURL + "RetrieveSessions.php", dbSessions),
@@ -103,17 +113,9 @@ public class DatabaseReceive : MonoBehaviour
             FetchDatabaseData(serverURL + "RetrievePlayerHits.php", dbPlayerHits),
             FetchDatabaseData(serverURL + "RetrievePlayerHeals.php", dbPlayerHeals),
             FetchDatabaseData(serverURL + "RetrievePlayerDeaths.php", dbPlayerDeaths),
-            FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages),
+            FetchDatabaseData(serverURL + "RetrievePlayerDamages.php", dbPlayerDamages)
             
-            // Views
-            FetchDatabaseData(serverURL + "RetrievePlayerRespawns_View.php", dbPlayerRespawnsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerPositions_View.php", dbPlayerPositionsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerJumps_View.php", dbPlayerJumpsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerInteractions_View.php", dbPlayerInteractionsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerHits_View.php", dbPlayerHitsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerHeals_View.php", dbPlayerHealsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerDeaths_View.php", dbPlayerDeathsView),
-            FetchDatabaseData(serverURL + "RetrievePlayerDamages_View.php", dbPlayerDamagesView)
+
         };
 
         // Start all fetch operations and wait for them to complete

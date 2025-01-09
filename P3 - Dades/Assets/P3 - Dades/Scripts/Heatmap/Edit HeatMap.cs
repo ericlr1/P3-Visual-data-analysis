@@ -45,14 +45,14 @@ public class EditHeatMap : MonoBehaviour
             {
                 _dataDictionary = new Dictionary<int, List<IDatabaseEntity>>
             {
-                { 0, dataRecieve.dbPlayerRespawns.Cast<IDatabaseEntity>().ToList() },
-                { 1, dataRecieve.dbPlayerPositions.Cast<IDatabaseEntity>().ToList() },
-                { 2, dataRecieve.dbPlayerJumps.Cast<IDatabaseEntity>().ToList() },
-                { 3, dataRecieve.dbPlayerInteractions.Cast<IDatabaseEntity>().ToList() },
-                { 4, dataRecieve.dbPlayerHits.Cast<IDatabaseEntity>().ToList() },
-                { 5, dataRecieve.dbPlayerHeals.Cast<IDatabaseEntity>().ToList() },
-                { 6, dataRecieve.dbPlayerDeaths.Cast<IDatabaseEntity>().ToList() },
-                { 7, dataRecieve.dbPlayerDamages.Cast<IDatabaseEntity>().ToList() }
+                { 0, dataRecieve.dbPlayerRespawnsView.Cast<IDatabaseEntity>().ToList() },
+                { 1, dataRecieve.dbPlayerPositionsView.Cast<IDatabaseEntity>().ToList() },
+                { 2, dataRecieve.dbPlayerJumpsView.Cast<IDatabaseEntity>().ToList() },
+                { 3, dataRecieve.dbPlayerInteractionsView.Cast<IDatabaseEntity>().ToList() },
+                { 4, dataRecieve.dbPlayerHitsView.Cast<IDatabaseEntity>().ToList() },
+                { 5, dataRecieve.dbPlayerHealsView.Cast<IDatabaseEntity>().ToList() },
+                { 6, dataRecieve.dbPlayerDeathsView.Cast<IDatabaseEntity>().ToList() },
+                { 7, dataRecieve.dbPlayerDamagesView.Cast<IDatabaseEntity>().ToList() }
             };
             }
             return _dataDictionary;
@@ -148,72 +148,70 @@ public class EditHeatMap : MonoBehaviour
         //Vaciamos la lista al inicio
         TileMapManager.tileMap.filteredList.Clear();
 
-        //Provisional string, de momento solo sirve para la view "users_sessions_positions"
-        string filtersQuery = string.Empty;
+        TileMapManager.tileMap.filteredList.AddRange(DataDictionary[TileMapManager.filterSettings.selectedDataIndex]);
+
 
         if ((filterSettings.activeFilters & FilterType.Country) != 0)
         {
-            string countryName = UserAttributes.GetCountryArray()[filterSettings.selectedCountryIndex];
-            
+            //UserAttributes.GetCountryArray()[filterSettings.selectedCountryIndex];
+            int count = TileMapManager.tileMap.filteredList.Count();
 
-            if (filtersQuery == string.Empty)
+            for (int i = count - 1; i >= 0; --i)
             {
-                filtersQuery += "WHERE ";
+                if (TileMapManager.tileMap.filteredList[i].country != UserAttributes.GetCountryArray()[filterSettings.selectedCountryIndex])
+                {
+                    TileMapManager.tileMap.filteredList.RemoveAt(i);
+                }
             }
 
-            filtersQuery += ("country = " + countryName);
         }
 
         if ((filterSettings.activeFilters & FilterType.Gender) != 0)
         {
-            string gender = UserAttributes.GetGenderArray()[filterSettings.selectedGenderIndex];
+            //UserAttributes.GetGenderArray()[filterSettings.selectedGenderIndex];
+            int count = TileMapManager.tileMap.filteredList.Count();
 
-
-            if (filtersQuery == string.Empty)
+            for (int i = count - 1; i >= 0; --i)
             {
-                filtersQuery += "WHERE ";
+                if (TileMapManager.tileMap.filteredList[i].gender != UserAttributes.GetGenderArray()[filterSettings.selectedGenderIndex])
+                {
+                    TileMapManager.tileMap.filteredList.RemoveAt(i);
+                }
             }
-
-            filtersQuery += ("gender = " + gender);
         }
 
         if ((filterSettings.activeFilters & FilterType.Age) != 0)
         {
-            if (filtersQuery == string.Empty)
+            //filterSettings.minAge;
+            //filterSettings.maxAge;
+            int count = TileMapManager.tileMap.filteredList.Count();
+
+            for (int i = count - 1; i >= 0; --i)
             {
-                filtersQuery += "WHERE ";
+                if (TileMapManager.tileMap.filteredList[i].age < filterSettings.minAge || TileMapManager.tileMap.filteredList[i].age > filterSettings.maxAge)
+                {
+                    TileMapManager.tileMap.filteredList.RemoveAt(i);
+                }
             }
-
-            filtersQuery += ("age BETWEEN " + filterSettings.minAge + " AND " + filterSettings.maxAge);
         }
-
-        //TODO: Hacer la consulta a SQL según los filtros
-        string sql_query = "SELECT sessionID, x, y, z, time FROM users_sessions_positions " + filtersQuery;
-
-        string sendPositionURL = "https://citmalumnes.upc.es/~mariogs5/" + "Generic Retrieve Data.php";
-
-        // Prepare data to send
-        Dictionary<string, string> data = new Dictionary<string, string>
-        {
-            { "sql", sql_query }
-        };
-
-        // Start the coroutine to send the data (TODO: Cambiar esto)
-        StartCoroutine(DatabaseSend.SendDataToServer(sendPositionURL, data));
 
         //Change the color and scale to the tiles
         DrawFilteredTiles();
 
-        //Debug.Log("sql query: " + sql_query);
     }
 
     public void DrawFilteredTiles()
     {
         // Agregar datos (Provisional)
-        TileMapManager.tileMap.filteredList.Clear();
+        //TileMapManager.tileMap.filteredList.Clear();
 
-        TileMapManager.tileMap.filteredList.AddRange(DataDictionary[TileMapManager.filterSettings.selectedDataIndex]);
+
         //TileMapManager.tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
+
+        if (TileMapManager.tileMap.filteredList.Count() == 0)
+        {
+            return;
+        }
 
         // Recibir datos (Provisional)
         foreach (IDatabaseEntity entity in TileMapManager.tileMap.filteredList)
