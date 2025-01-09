@@ -188,8 +188,8 @@ public class MyComponentEditor : Editor
     private void SetLargeTitle(string name, int size = 24)
     {
         var style = new GUIStyle(EditorStyles.boldLabel);
-        style.fontSize = size;  // Cambiar el tamaño de la fuente
-        style.alignment = TextAnchor.MiddleCenter; // Centrar el texto
+        style.fontSize = size;  // Change font size
+        style.alignment = TextAnchor.MiddleCenter; // Center text
         EditorGUILayout.LabelField(name, style);
     }
 

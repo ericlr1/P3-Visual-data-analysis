@@ -1,60 +1,55 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Principal;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class TileMapManager : MonoBehaviour
 {
-    [HideInInspector] public Color myColor = Color.white;  // Propiedad pública de tipo Color
-
-    [HideInInspector] public Color myBaseColor = Color.white;  // Propiedad pública de tipo Color
+    // Tile colors
+    [HideInInspector] public Color myColor = Color.white;
+    [HideInInspector] public Color myBaseColor = Color.white;
 
     #region Filter Options
-    // Country Filter Vars
+    // Country filter variables
     [HideInInspector] public bool applyCountryFilter;
     [HideInInspector] public int selectedCountryIndex;
 
-    // Gender Filter Vars
+    // Gender filter variables
     [HideInInspector] public bool applyGenderFilter;
     [HideInInspector] public int selectedGenderIndex;
 
-    // Age Filter Vars
+    // Age filter variables
     [HideInInspector] public bool applyAgeFilter;
     [HideInInspector] public int minAge = 0;
     [HideInInspector] public int maxAge = 100;
 
+    // General filter data
     [HideInInspector] public int selectedDataIndex;
     #endregion
 
-    //Filter Settings object
+    // Static filter settings
     public static FilterSettings filterSettings;
 
-    // TileMap Data
+    // Static tile map data
     public static TileMap tileMap;
 
+    // Prefab for tiles
     [SerializeField] private GameObject tilePrefab;
 
-    [Space(1.5f)]
-
+    // Tile settings
     [Header("Tile Settings")]
+    [SerializeField, Range(1, 100)] int rows; // Number of rows
+    [SerializeField, Range(1, 100)] int columns; // Number of columns
+    [SerializeField, Range(1, 1000)] int mapX; // Map width
+    [SerializeField, Range(1, 1000)] int mapZ; // Map height
 
-    // Grid Vars
-    [SerializeField, Range(1, 100)] int rows;
-    [SerializeField, Range(1, 100)] int columns;
-
-    // HeatMap Size Vars
-    [SerializeField, Range(1, 1000)] int mapX;
-    [SerializeField, Range(1, 1000)] int mapZ;
-
+    // Internal references
     private GameObject parent;
     private EditHeatMap heatMap;
 
-    // Filtered Users
+    // Number of filtered users
     public static int filteredUsers = 0;
 
+    // Initialize the tool and set up the tile map
     public void InitTool()
     {
         if (parent == null)
@@ -63,6 +58,7 @@ public class TileMapManager : MonoBehaviour
             heatMap = parent.GetComponent<EditHeatMap>();
         }
 
+        // Set up tile map properties
         tileMap.prefab = tilePrefab;
         tileMap.parent = parent;
         tileMap.rows = rows;
@@ -77,56 +73,62 @@ public class TileMapManager : MonoBehaviour
             tileMap.filteredList = new List<IDatabaseEntity>();
         }
 
+        // Initialize heat map tool
         heatMap.InitTool();
     }
+
+    // Generate the tiles in the heat map
     public void GenerateTiles()
     {
         heatMap.GenerateTiles();
     }
+
+    // Delete the existing tiles
     public void DeleteTiles()
     {
         heatMap.DeleteTiles();
     }
 
+    // Apply the selected filters
     public void ApplyFilters()
-    {        
-        //Check if any filter is being used
-        #region Filters
+    {
+        // Check and apply country filter
         if (applyCountryFilter)
         {
             filterSettings.selectedCountryIndex = selectedCountryIndex;
-            filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Country;
+            filterSettings.activeFilters |= FilterType.Country;
         }
 
+        // Check and apply gender filter
         if (applyGenderFilter)
         {
             filterSettings.selectedGenderIndex = selectedGenderIndex;
-            filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Gender;
+            filterSettings.activeFilters |= FilterType.Gender;
         }
 
+        // Check and apply age filter
         if (applyAgeFilter)
         {
             filterSettings.minAge = minAge;
             filterSettings.maxAge = maxAge;
-            filterSettings.activeFilters = filterSettings.activeFilters | FilterType.Age;
+            filterSettings.activeFilters |= FilterType.Age;
         }
-        #endregion
 
-        //Linkear selectedDataIndex del struct
+        // Link selected data index
         filterSettings.selectedDataIndex = selectedDataIndex;
 
-
+        // Apply filters to the heat map
         heatMap.ApplyFilters(filterSettings);
 
-        //Reset activeFilters
+        // Reset active filters
         filterSettings.activeFilters = FilterType.None;
-
     }
 
+    // Execute the complete heat map tool process
     public void ExecuteHeatMapTool()
     {
-        InitTool();
-        GenerateTiles();
-        ApplyFilters();
+        InitTool(); // Initialize the tool
+        GenerateTiles(); // Generate tiles
+        ApplyFilters(); // Apply filters
     }
 }

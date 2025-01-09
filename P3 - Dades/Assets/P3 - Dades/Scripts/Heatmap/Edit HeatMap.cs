@@ -11,17 +11,7 @@ using UnityEngine.UIElements;
 
 public class EditHeatMap : MonoBehaviour
 {
-    // Grid Vars
-    private float f_Rows;
-    private float f_Columns;
-
-    // HeatMap Size Vars
-    private float f_MapX;
-    private float f_MapZ;
-
-    // Tile Vars
-    private float tileSize_X;
-    private float tileSize_Z;
+    // Tile Variables
     private Vector3 tileSize;
 
     private float startX;
@@ -29,7 +19,6 @@ public class EditHeatMap : MonoBehaviour
 
     // Manager Vars
     private GameObject parent;
-    //public List<GameObject> tiles;
     public List<TileStruct> tiles;
 
     // Database Object
@@ -95,7 +84,7 @@ public class EditHeatMap : MonoBehaviour
                 tile.tileGO = Instantiate(TileMapManager.tileMap.prefab, position, Quaternion.identity, transform);
                 tile.tileGO.name = $"Slot ({row},{column})";
 
-                // Cambiar el tamaño del tile
+                // Change the tile size
                 tile.tileGO.transform.localScale = new Vector3(tileSize.x / tile.tileGO.transform.localScale.x, tile.tileGO.transform.localScale.y, tileSize.z / tile.tileGO.transform.localScale.z);
 
                 Color baseColor = TileMapManager.tileMap.myBaseColor;
@@ -145,7 +134,7 @@ public class EditHeatMap : MonoBehaviour
 
     public void ApplyFilters(FilterSettings filterSettings)
     {
-        //Vaciamos la lista al inicio
+        // Empty the list
         TileMapManager.tileMap.filteredList.Clear();
 
         TileMapManager.tileMap.filteredList.AddRange(DataDictionary[TileMapManager.filterSettings.selectedDataIndex]);
@@ -153,7 +142,6 @@ public class EditHeatMap : MonoBehaviour
 
         if ((filterSettings.activeFilters & FilterType.Country) != 0)
         {
-            //UserAttributes.GetCountryArray()[filterSettings.selectedCountryIndex];
             int count = TileMapManager.tileMap.filteredList.Count();
 
             for (int i = count - 1; i >= 0; --i)
@@ -163,12 +151,10 @@ public class EditHeatMap : MonoBehaviour
                     TileMapManager.tileMap.filteredList.RemoveAt(i);
                 }
             }
-
         }
 
         if ((filterSettings.activeFilters & FilterType.Gender) != 0)
         {
-            //UserAttributes.GetGenderArray()[filterSettings.selectedGenderIndex];
             int count = TileMapManager.tileMap.filteredList.Count();
 
             for (int i = count - 1; i >= 0; --i)
@@ -182,8 +168,6 @@ public class EditHeatMap : MonoBehaviour
 
         if ((filterSettings.activeFilters & FilterType.Age) != 0)
         {
-            //filterSettings.minAge;
-            //filterSettings.maxAge;
             int count = TileMapManager.tileMap.filteredList.Count();
 
             for (int i = count - 1; i >= 0; --i)
@@ -197,25 +181,20 @@ public class EditHeatMap : MonoBehaviour
 
         TileMapManager.filteredUsers = TileMapManager.tileMap.filteredList.Count;
         
-        //Change the color and scale to the tiles
+        // Change the color and scale to the tiles
         DrawFilteredTiles();
 
     }
 
     public void DrawFilteredTiles()
     {
-        // Agregar datos (Provisional)
-        //TileMapManager.tileMap.filteredList.Clear();
-
-
-        //TileMapManager.tileMap.filteredList.AddRange(dataRecieve.dbPlayerDamages);
-
+        // Check if the list is empty
         if (TileMapManager.tileMap.filteredList.Count() == 0)
         {
             return;
         }
 
-        // Recibir datos (Provisional)
+        // Recibe data
         foreach (IDatabaseEntity entity in TileMapManager.tileMap.filteredList)
         {
             Vector3 pos = new Vector3();
@@ -225,21 +204,18 @@ public class EditHeatMap : MonoBehaviour
 
             int index = GetTileIndex.GetTileIndexFromPosition(pos, TileMapManager.tileMap.rows, TileMapManager.tileMap.columns, startX - (tileSize.x / 2), startZ + (tileSize.z / 2), tileSize);
             
-            // Sumar 1 al Heat
+            // Increment Heat
             TileStruct tempTile = tiles[index];
             tempTile.heat++;
             tiles[index] = tempTile;
-
-            //Debug.Log("Tile: " + index + "Calor: " + tiles[index].heat);
         }
 
-        // Sort en Funcion del Heat
+        // Sort by Heat
         tiles.Sort((tile1, tile2) => tile2.heat.CompareTo(tile1.heat));
 
-        // Coeficiente maximo de Heat
         float maxheatCoef = 1 / tiles[0].heat;
 
-        // Editar cada tile en funcion del Heat que tenga
+        // Edit tiles based on it's heat
         for (int i = 0; i < tiles.Count; i++)
         {
             Vector3 tileScale = new Vector3(tileSize.x, 1, tileSize.z);

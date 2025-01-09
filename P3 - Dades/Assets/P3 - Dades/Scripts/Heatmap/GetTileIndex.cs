@@ -14,9 +14,6 @@ public static class GetTileIndex
         int _column = Mathf.FloorToInt(localX / tileSize.x);
         int _row = Mathf.CeilToInt(localZ / tileSize.z);
 
-        //Debug.Log($"LocalX: {localX}, LocalZ: {localZ}, Row: {-_row}, Column: {_column} ");
-        //Debug.Log($"Rows: {rows}, Columns: {columns}");
-
         // Check if its in the bounds
         if (_column < 0 || _column >= columns || -_row < 0 || -_row >= rows)
         {

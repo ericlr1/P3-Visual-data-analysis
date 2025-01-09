@@ -3,10 +3,10 @@ using System.Collections.Generic;
 [System.Flags]
 public enum FilterType
 {
-    None = 0,          // 0000 (binario)
-    Country = 1 << 0,  // 0001 (binario) = 1
-    Gender = 1 << 1,   // 0010 (binario) = 2
-    Age = 1 << 2       // 0100 (binario) = 4
+    None = 0,          // 0000 
+    Country = 1 << 0,  // 0001 
+    Gender = 1 << 1,   // 0010 
+    Age = 1 << 2       // 0100 
 }
 public struct FilterSettings
 {
